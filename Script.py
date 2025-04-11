@@ -4,16 +4,16 @@
 
 
 class script(object):
-    START_TXT = """<b>ʜᴏʟᴀ {}, 👋, Bɪᴇɴᴠᴇɴɪᴅᴏ ᴀ ɴᴜᴇsᴛʀᴏ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ Aʀᴄʜɪᴠᴏs.</b>"""
+    START_TXT = """<b>!Hola {} 👋!, Bienvenido a Nuestro Bot de Almacenamiento de Archivos.</b>"""
 
 # No Eliminar Crédito Tg - @VJ_Botz
 # Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
 # Pregunta Dudas en telegram @KingVJ01
 
 
-    CAPTION = """<b>📂 ɴᴏᴍʙʀᴇ ᴅᴇʟ ᴀʀᴄʜɪᴠᴏ : {file_name}
+    CAPTION = """<b>📂 Nombre Del Archivo: {file_name}
 
-⚙️ ᴛᴀᴍᴀñᴏ : {file_size}
+⚙️ Tamaño: {file_size}
 
 𝖩𝗈𝗂𝗇➥ [「Nᴇss Cʟᴏᴜᴅ」](https://t.me/NessCloud)</b>""" 
 
@@ -43,7 +43,7 @@ sɪ ǫᴜɪᴇʀᴇs ᴇsᴛᴀ ᴄᴀʀᴀᴄᴛᴇʀísᴛɪᴄᴀ, ᴄʀᴇ�
 # Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
 # Pregunta Dudas en telegram @KingVJ01
 
-    ABOUT_TXT = """<b>ʜᴏʟᴀ sᴏʏ ᴜɴ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ ᴀʀᴄʜɪᴠᴏs ᴘᴇʀᴍᴀɴᴇɴᴛᴇ.
+    ABOUT_TXT = """<b> Hola Soy un Bot de Almacenamiento de Archivos Permanentes. 
 
 🤖 ᴍɪ ɴᴏᴍʙʀᴇ: {}
 
@@ -51,14 +51,14 @@ sɪ ǫᴜɪᴇʀᴇs ᴇsᴛᴀ ᴄᴀʀᴀᴄᴛᴇʀísᴛɪᴄᴀ, ᴄʀᴇ�
 
 📚 ʙɪʙʟɪᴏᴛᴇᴄᴀ: <a href=https://docs.pyrogram.org>Pyrogram</a>
 
-🧑🏻‍💻 ᴅᴇsᴀʀʀᴏʟʟᴀᴅᴏʀ: <a href=https://t.me/WayK17>Elaina</a>
+🧑🏻‍💻 ᴅᴇsᴀʀʀᴏʟʟᴀᴅᴏʀ: <a href=https://t.me/WayK17X></a>
 
-👥 ɢʀᴜᴘᴏ ᴅᴇ sᴏᴘᴏʀᴛᴇ: <a href=https://t.me/NESS_Soporte>NESS Cloud | CHAT</a>
+👥 ɢʀᴜᴘᴏ ᴅᴇ sᴏᴘᴏʀᴛᴇ: <a href=https://t.me/NESS_Soporte></a>
 
-📢 ᴄᴀɴᴀʟ ᴅᴇ ᴀᴄᴛᴜᴀʟɪᴢᴀᴄɪᴏɴᴇs: <a href=https://t.me/NessCloud>NESS Cloud</a></b>
+📢 ᴄᴀɴᴀʟ ᴅᴇ ᴀᴄᴛᴜᴀʟɪᴢᴀᴄɪᴏɴᴇs: <a href=https://t.me/NessCloud>Nᴇss Cʟᴏᴜᴅ</a></b>
 """
 
-    CABOUT_TXT = """<b>ʜᴏʟᴀ sᴏʏ ᴜɴ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ ᴀʀᴄʜɪᴠᴏs.
+    CABOUT_TXT = """<b> Hola Soy un Bot de Almacenamiento de Archivos Permanentes.
 
 🤖 ᴍɪ ɴᴏᴍʙʀᴇ: {}
 
