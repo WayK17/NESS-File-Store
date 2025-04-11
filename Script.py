@@ -1,148 +1,148 @@
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
 
 
 class script(object):
-    START_TXT = """<b>ʜᴇʟʟᴏ {}, ᴍʏ ɴᴀᴍᴇ {} 👋, ɪ ᴀᴍ ʟᴀᴛᴇꜱᴛ ᴀᴅᴠᴀɴᴄᴇᴅ ᴀɴᴅ ᴘᴏᴡᴇʀꜰᴜʟ ꜰɪʟᴇ ꜱᴛᴏʀᴇ ʙᴏᴛ + ᴄʟᴏɴᴇ ғᴇᴀᴛᴜʀᴇ + sᴛʀᴇᴀᴍ / ᴅᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ ғᴇᴀᴛᴜʀᴇ + ᴄᴜꜱᴛᴏᴍ ᴜʀʟ ꜱʜᴏʀᴛɴᴇʀ ꜱᴜᴘᴘᴏʀᴛ + ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ sᴜᴘᴘᴏʀᴛ ᴀɴᴅ ʙᴇꜱᴛ ᴜɪ ᴘᴇʀꜰᴏʀᴍᴀɴᴄᴇ </b>"""
+    START_TXT = """<b>ʜᴏʟᴀ {}, ᴍɪ ɴᴏᴍʙʀᴇ ᴇs {} 👋, sᴏʏ ᴜɴ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ ᴀʀᴄʜɪᴠᴏs ᴀᴠᴀɴᴢᴀᴅᴏ ʏ ᴘᴏᴛᴇɴᴛᴇ + ғᴜɴᴄɪᴏɴᴀʟɪᴅᴀᴅ ᴅᴇ ᴄʟᴏɴᴀᴄɪóɴ + ғᴜɴᴄɪᴏɴᴀʟɪᴅᴀᴅ ᴅᴇ ᴇɴʟᴀᴄᴇ ᴅᴇ ᴛʀᴀɴsᴍɪsɪóɴ / ᴅᴇsᴄᴀʀɢᴀ + sᴏᴘᴏʀᴛᴇ ᴅᴇ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ᴘᴇʀsᴏɴᴀʟɪᴢᴀᴅᴏ + sᴏᴘᴏʀᴛᴇ ᴅᴇ ᴇʟɪᴍɪɴᴀᴄɪóɴ ᴀᴜᴛᴏᴍáᴛɪᴄᴀ ʏ ᴍᴇᴊᴏʀ ʀᴇɴᴅɪᴍɪᴇɴᴛᴏ ᴅᴇ ɪɴᴛᴇʀғᴀᴢ ᴅᴇ ᴜsᴜᴀʀɪᴏ</b>"""
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
 
-    
-    CAPTION = """<b>📂 ғɪʟᴇɴᴀᴍᴇ : {file_name}
 
-⚙️ sɪᴢᴇ : {file_size}
+    CAPTION = """<b>📂 ɴᴏᴍʙʀᴇ ᴅᴇʟ ᴀʀᴄʜɪᴠᴏ : {file_name}
 
-Jᴏɪɴ [ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ](https://t.me/vj_botz)</b>""" 
+⚙️ ᴛᴀᴍᴀñᴏ : {file_size}
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+Úɴᴇᴛᴇ ᴀʟ [ᴄᴀɴᴀʟ ᴅᴇ ᴀᴄᴛᴜᴀʟɪᴢᴀᴄɪᴏɴᴇs](https://t.me/vj_botz)</b>""" 
 
-    SHORTENER_API_MESSAGE = """<b>Tᴏ ᴀᴅᴅ ᴏʀ ᴜᴘᴅᴀᴛᴇ ʏᴏᴜʀ Sʜᴏʀᴛɴᴇʀ Wᴇʙsɪᴛᴇ API, /api (ᴀᴘɪ)
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
+
+    SHORTENER_API_MESSAGE = """<b>Pᴀʀᴀ ᴀɢʀᴇɢᴀʀ ᴏ ᴀᴄᴛᴜᴀʟɪᴢᴀʀ ᴛᴜ API ᴅᴇʟ Sɪᴛɪᴏ Aᴄᴏʀᴛᴀᴅᴏʀ, /api (ᴀᴘɪ)
             
-<b>Ex: /api 𝟼LZǫ𝟾𝟻𝟷sXᴏғғғPHᴜɢɪKQǫ
+<b>Eᴊ: /api 𝟼LZǫ𝟾𝟻𝟷sXᴏғғғPHᴜɢɪKQǫ
 
-<b>Cᴜʀʀᴇɴᴛ Wᴇʙsɪᴛᴇ: {base_site}
+<b>Sɪᴛɪᴏ Wᴇʙ Aᴄᴛᴜᴀʟ: {base_site}
 
-Cᴜʀʀᴇɴᴛ Sʜᴏʀᴛᴇɴᴇʀ API:</b> `{shortener_api}`
+API ᴅᴇʟ Aᴄᴏʀᴛᴀᴅᴏʀ Aᴄᴛᴜᴀʟ:</b> `{shortener_api}`
 
-If You Want To Remove Api Then Copy This And Send To Bot - `/api None`"""
+Si Deseas Eliminar la Api, Entonces Copia Esto y Envíalo al Bot - `/api None`"""
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
 
-    CLONE_START_TXT = """<b>ʜᴇʟʟᴏ {}, ᴍʏ ɴᴀᴍᴇ {} 👋, ɪ ᴀᴍ ʟᴀᴛᴇꜱᴛ ᴀᴅᴠᴀɴᴄᴇᴅ ᴀɴᴅ ᴘᴏᴡᴇʀꜰᴜʟ ꜰɪʟᴇ ꜱᴛᴏʀᴇ ʙᴏᴛ + ᴄᴜꜱᴛᴏᴍ ᴜʀʟ ꜱʜᴏʀᴛɴᴇʀ ꜱᴜᴘᴘᴏʀᴛ ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ sᴜᴘᴘᴏʀᴛ ᴀɴᴅ ʙᴇꜱᴛ ᴜɪ ᴘᴇʀꜰᴏʀᴍᴀɴᴄᴇ
+    CLONE_START_TXT = """<b>ʜᴏʟᴀ {}, ᴍɪ ɴᴏᴍʙʀᴇ ᴇs {} 👋, sᴏʏ ᴜɴ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ ᴀʀᴄʜɪᴠᴏs ᴀᴠᴀɴᴢᴀᴅᴏ ʏ ᴘᴏᴛᴇɴᴛᴇ + sᴏᴘᴏʀᴛᴇ ᴅᴇ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ᴘᴇʀsᴏɴᴀʟɪᴢᴀᴅᴏ sᴏᴘᴏʀᴛᴇ ᴅᴇ ᴇʟɪᴍɪɴᴀᴄɪóɴ ᴀᴜᴛᴏᴍáᴛɪᴄᴀ ʏ ᴍᴇᴊᴏʀ ʀᴇɴᴅɪᴍɪᴇɴᴛᴏ ᴅᴇ ɪɴᴛᴇʀғᴀᴢ ᴅᴇ ᴜsᴜᴀʀɪᴏ
 
-ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴛʜɪs ғᴇᴀᴛᴜʀᴇ ᴛʜᴇɴ ᴄʀᴇᴀᴛᴇ ʏᴏᴜʀ ᴏᴡɴ ᴄʟᴏɴᴇ ʙᴏᴛ ғʀᴏᴍ ᴍʏ <a href=https://t.me/vj_botz>ᴘᴀʀᴇɴᴛ</a></b>"""
+sɪ ǫᴜɪᴇʀᴇs ᴇsᴛᴀ ᴄᴀʀᴀᴄᴛᴇʀísᴛɪᴄᴀ, ᴄʀᴇᴀ ᴛᴜ ᴘʀᴏᴘɪᴏ ʙᴏᴛ ᴄʟᴏɴ ᴅᴇsᴅᴇ ᴍɪ <a href=https://t.me/vj_botz>ᴏʀɪɢɪɴᴀʟ</a></b>"""
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
 
-    ABOUT_TXT = """<b>ʜɪ ɪ ᴀᴍ ᴘᴇʀᴍᴀɴᴇɴᴛ ғɪʟᴇ sᴛᴏʀᴇ ʙᴏᴛ ᴡɪᴛʜ ᴄʟᴏɴᴇ ғᴇᴀᴛᴜʀᴇ + ᴄᴜsᴛᴏᴍ ᴜʀʟ sʜᴏʀᴛɴᴇʀ ɪᴛ ᴍᴇᴀɴs ᴀɴʏ ᴜsᴇʀ ᴄᴀɴ sᴇᴛ ʜɪs ᴜʀʟ sʜᴏʀᴛɴᴇʀ ᴀɴᴅ + ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ.
+    ABOUT_TXT = """<b>ʜᴏʟᴀ sᴏʏ ᴜɴ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ ᴀʀᴄʜɪᴠᴏs ᴘᴇʀᴍᴀɴᴇɴᴛᴇ ᴄᴏɴ ғᴜɴᴄɪóɴ ᴅᴇ ᴄʟᴏɴᴀᴄɪóɴ + ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ᴘᴇʀsᴏɴᴀʟɪᴢᴀᴅᴏ ʟᴏ ǫᴜᴇ sɪɢɴɪғɪᴄᴀ ǫᴜᴇ ᴄᴜᴀʟǫᴜɪᴇʀ ᴜsᴜᴀʀɪᴏ ᴘᴜᴇᴅᴇ ᴄᴏɴғɪɢᴜʀᴀʀ sᴜ ᴘʀᴏᴘɪᴏ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ʏ + ᴇʟɪᴍɪɴᴀᴄɪóɴ ᴀᴜᴛᴏᴍáᴛɪᴄᴀ.
 
-🤖 ᴍʏ ɴᴀᴍᴇ: {}
+🤖 ᴍɪ ɴᴏᴍʙʀᴇ: {}
 
-📝 ʟᴀɴɢᴜᴀɢᴇ: <a href=https://www.python.org>𝐏𝐲𝐭𝐡𝐨𝐧𝟑</a>
+📝 ʟᴇɴɢᴜᴀᴊᴇ: <a href=https://www.python.org>𝐏𝐲𝐭𝐡𝐨𝐧𝟑</a>
 
-📚 ʟɪʙʀᴀʀʏ: <a href=https://docs.pyrogram.org>𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦</a>
+📚 ʙɪʙʟɪᴏᴛᴇᴄᴀ: <a href=https://docs.pyrogram.org>𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦</a>
 
-🧑🏻‍💻 ᴅᴇᴠᴇʟᴏᴘᴇʀ: <a href=https://t.me/Kingvj01>𝐓𝐞𝐜𝐡 𝐕𝐉</a>
+🧑🏻‍💻 ᴅᴇsᴀʀʀᴏʟʟᴀᴅᴏʀ: <a href=https://t.me/Kingvj01>𝐓𝐞𝐜𝐡 𝐕𝐉</a>
 
-👥 sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ: <a href=https://t.me/VJ_Bot_Disscussion>𝐕𝐉 𝐒𝐮𝐩𝐩𝐨𝐫𝐭</a>
+👥 ɢʀᴜᴘᴏ ᴅᴇ sᴏᴘᴏʀᴛᴇ: <a href=https://t.me/VJ_Bot_Disscussion>𝐕𝐉 𝐒𝐨𝐩𝐨𝐫𝐭𝐞</a>
 
-📢 ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ: <a href=https://t.me/vj_botz>𝐕𝐉 𝐔𝐩𝐝𝐚𝐭𝐞</a></b>
+📢 ᴄᴀɴᴀʟ ᴅᴇ ᴀᴄᴛᴜᴀʟɪᴢᴀᴄɪᴏɴᴇs: <a href=https://t.me/vj_botz>𝐕𝐉 𝐀𝐜𝐭𝐮𝐚𝐥𝐢𝐳𝐚𝐜𝐢𝐨𝐧𝐞𝐬</a></b>
 """
 
-    CABOUT_TXT = """<b>ʜɪ ɪ ᴀᴍ ᴘᴇʀᴍᴀɴᴇɴᴛ ғɪʟᴇ sᴛᴏʀᴇ ʙᴏᴛ ᴡɪᴛʜ ᴄʟᴏɴᴇ ғᴇᴀᴛᴜʀᴇ + ᴄᴜsᴛᴏᴍ ᴜʀʟ sʜᴏʀᴛɴᴇʀ ɪᴛ ᴍᴇᴀɴs ᴀɴʏ ᴜsᴇʀ ᴄᴀɴ sᴇᴛ ʜɪs ᴜʀʟ sʜᴏʀᴛɴᴇʀ ᴀɴᴅ + ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ.
+    CABOUT_TXT = """<b>ʜᴏʟᴀ sᴏʏ ᴜɴ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ ᴀʀᴄʜɪᴠᴏs ᴘᴇʀᴍᴀɴᴇɴᴛᴇ ᴄᴏɴ ғᴜɴᴄɪóɴ ᴅᴇ ᴄʟᴏɴᴀᴄɪóɴ + ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ᴘᴇʀsᴏɴᴀʟɪᴢᴀᴅᴏ ʟᴏ ǫᴜᴇ sɪɢɴɪғɪᴄᴀ ǫᴜᴇ ᴄᴜᴀʟǫᴜɪᴇʀ ᴜsᴜᴀʀɪᴏ ᴘᴜᴇᴅᴇ ᴄᴏɴғɪɢᴜʀᴀʀ sᴜ ᴘʀᴏᴘɪᴏ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ʏ + ᴇʟɪᴍɪɴᴀᴄɪóɴ ᴀᴜᴛᴏᴍáᴛɪᴄᴀ.
 
-🤖 ᴍʏ ɴᴀᴍᴇ: {}
+🤖 ᴍɪ ɴᴏᴍʙʀᴇ: {}
 
-📝 ʟᴀɴɢᴜᴀɢᴇ: <a href=https://www.python.org>𝐏𝐲𝐭𝐡𝐨𝐧𝟑</a>
+📝 ʟᴇɴɢᴜᴀᴊᴇ: <a href=https://www.python.org>𝐏𝐲𝐭𝐡𝐨𝐧𝟑</a>
 
-📚 ʟɪʙʀᴀʀʏ: <a href=https://docs.pyrogram.org>𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦</a>
+📚 ʙɪʙʟɪᴏᴛᴇᴄᴀ: <a href=https://docs.pyrogram.org>𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦</a>
 
-🧑🏻‍💻 ᴅᴇᴠᴇʟᴏᴘᴇʀ: <a href=tg://user?id={}>ᴅᴇᴠᴇʟᴏᴘᴇʀ</a></b>
+🧑🏻‍💻 ᴅᴇsᴀʀʀᴏʟʟᴀᴅᴏʀ: <a href=tg://user?id={}>ᴅᴇsᴀʀʀᴏʟʟᴀᴅᴏʀ</a></b>
 """
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
 
-    CLONE_TXT = """<b>ʜᴇʟʟᴏ {} 👋
+    CLONE_TXT = """<b>ʜᴏʟᴀ {} 👋
 
-First Send /clone command then follow below steps.
+Primero envía el comando /clone y luego sigue estos pasos.
     
-1) sᴇɴᴅ <code>/newbot</code> ᴛᴏ @BotFather
-2) ɢɪᴠᴇ ᴀ ɴᴀᴍᴇ ꜰᴏʀ ʏᴏᴜʀ ʙᴏᴛ.
-3) ɢɪᴠᴇ ᴀ ᴜɴɪǫᴜᴇ ᴜsᴇʀɴᴀᴍᴇ.
-4) ᴛʜᴇɴ ʏᴏᴜ ᴡɪʟʟ ɢᴇᴛ ᴀ ᴍᴇssᴀɢᴇ ᴡɪᴛʜ ʏᴏᴜʀ ʙᴏᴛ ᴛᴏᴋᴇɴ.
-5) ꜰᴏʀᴡᴀʀᴅ ᴛʜᴀᴛ ᴍᴇssᴀɢᴇ ᴛᴏ ᴍᴇ.
+1) ᴇɴᴠíᴀ <code>/newbot</code> ᴀ @BotFather
+2) ᴀsɪɢɴᴀ ᴜɴ ɴᴏᴍʙʀᴇ ᴘᴀʀᴀ ᴛᴜ ʙᴏᴛ.
+3) ᴀsɪɢɴᴀ ᴜɴ ɴᴏᴍʙʀᴇ ᴅᴇ ᴜsᴜᴀʀɪᴏ úɴɪᴄᴏ.
+4) ʟᴜᴇɢᴏ ʀᴇᴄɪʙɪʀás ᴜɴ ᴍᴇɴsᴀᴊᴇ ᴄᴏɴ ᴛᴜ ᴛᴏᴋᴇɴ ᴅᴇ ʙᴏᴛ.
+5) ʀᴇᴇɴᴠíᴀ ᴇsᴇ ᴍᴇɴsᴀᴊᴇ ᴀ ᴍí.
 
-ᴛʜᴇɴ ɪ ᴀᴍ ᴛʀʏ ᴛᴏ ᴄʀᴇᴀᴛᴇ ᴀ ᴄᴏᴘʏ ʙᴏᴛ ᴏғ ᴍᴇ ғᴏʀ ʏᴏᴜ ᴏɴʟʏ 😌</b>"""
+ᴇɴᴛᴏɴᴄᴇs ɪɴᴛᴇɴᴛᴀʀé ᴄʀᴇᴀʀ ᴜɴᴀ ᴄᴏᴘɪᴀ ᴍíᴀ ᴘᴀʀᴀ ᴛɪ sᴏʟᴀᴍᴇɴᴛᴇ 😌</b>"""
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
 
-    HELP_TXT = """<b><u>💢 HOW TO USE THE BOT ☺️</u>
+    HELP_TXT = """<b><u>💢 CÓMO USAR EL BOT ☺️</u>
 
-🔻 /link - ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴠɪᴅᴇᴏ ᴏʀ ғɪʟᴇ ᴛᴏ ɢᴇᴛ sʜᴀʀᴀʙʟᴇ ʟɪɴᴋ
+🔻 /link - ʀᴇsᴘᴏɴᴅᴇ ᴀ ᴜɴ ᴠɪᴅᴇᴏ ᴏ ᴀʀᴄʜɪᴠᴏ ᴘᴀʀᴀ ᴏʙᴛᴇɴᴇʀ ᴜɴ ᴇɴʟᴀᴄᴇ ᴄᴏᴍᴘᴀʀᴛɪʙʟᴇ
 
-🔻 /batch - sᴇɴᴅ ғɪʀsᴛ ʟɪɴᴋ ᴏғ ғɪʟᴇ sᴛᴏʀᴇ ᴄʜᴀɴɴᴇʟ ᴘᴏsᴛ ᴛʜᴇɴ ʟᴀsᴛ ᴘᴏsᴛ ʟɪɴᴋ ᴀɴᴅ ᴍᴀᴋᴇ sᴜʀᴇ ʙᴏᴛ ɪs ᴀᴅᴍɪɴ ɪɴ ʏᴏᴜʀ ғɪʟᴇ sᴛᴏʀᴇ ᴄʜᴀɴɴᴇʟ.
-ᴇx - /batch https://t.me/vj_botz/25 https://t.me/vj_botz/30
+🔻 /batch - ᴇɴᴠíᴀ ᴘʀɪᴍᴇʀᴏ ᴇʟ ᴇɴʟᴀᴄᴇ ᴅᴇʟ ᴘʀɪᴍᴇʀ ᴘᴏsᴛ ᴅᴇʟ ᴄᴀɴᴀʟ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ʏ ʟᴜᴇɢᴏ ᴇʟ ᴇɴʟᴀᴄᴇ ᴅᴇʟ úʟᴛɪᴍᴏ ᴘᴏsᴛ, ᴀsᴇɢúʀᴀᴛᴇ ᴅᴇ ǫᴜᴇ ᴇʟ ʙᴏᴛ sᴇᴀ ᴀᴅᴍɪɴɪsᴛʀᴀᴅᴏʀ ᴇɴ ᴛᴜ ᴄᴀɴᴀʟ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ.
+ᴇᴊ - /batch https://t.me/vj_botz/25 https://t.me/vj_botz/30
 
-🔻 /clone - ᴄʀᴇᴀᴛᴇ ʏᴏᴜʀ ᴏᴡɴ ɪᴅᴇɴᴛɪᴄᴀʟ ᴄʟᴏɴᴇ ʙᴏᴛ
+🔻 /clone - ᴄʀᴇᴀ ᴛᴜ ᴘʀᴏᴘɪᴏ ʙᴏᴛ ᴄʟᴏɴ ɪᴅéɴᴛɪᴄᴏ
 
-🔻 /base_site - ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴛᴏ sᴇᴛ ᴜʀʟ sʜᴏʀᴛɴᴇʀ ʟɪɴᴋ ᴅᴏᴍᴀɪɴ 
-ᴇx - /base_site ʏᴏᴜʀᴅᴏᴍᴀɪɴ.ᴄᴏᴍ
+🔻 /base_site - ᴜsᴀ ᴇsᴛᴇ ᴄᴏᴍᴀɴᴅᴏ ᴘᴀʀᴀ ᴄᴏɴғɪɢᴜʀᴀʀ ᴇʟ ᴅᴏᴍɪɴɪᴏ ᴅᴇʟ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟs 
+ᴇᴊ - /base_site ᴛᴜᴅᴏᴍɪɴɪᴏ.ᴄᴏᴍ
 
-🔻 /api - sᴇᴛ ʏᴏᴜʀ ᴜʀʟ sʜᴏʀᴛɴᴇʀ ᴀᴄᴄᴏᴜɴᴛ ᴀᴘɪ 
-ᴇx - /api ʙᴀᴏᴡɢᴡᴋʟᴀᴀʙᴀᴋʟ
+🔻 /api - ᴄᴏɴғɪɢᴜʀᴀ ʟᴀ ᴀᴘɪ ᴅᴇ ᴛᴜ ᴄᴜᴇɴᴛᴀ ᴅᴇ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟs 
+ᴇᴊ - /api ʙᴀᴏᴡɢᴡᴋʟᴀᴀʙᴀᴋʟ
 
-🔻 /deletecloned - ᴜsᴇ ᴛʜɪs ғᴏʀ ᴅᴇʟᴇᴛᴇ ʏᴏᴜʀ ᴄʟᴏɴᴇ ʙᴏᴛ 
+🔻 /deletecloned - ᴜsᴀ ᴇsᴛᴏ ᴘᴀʀᴀ ᴇʟɪᴍɪɴᴀʀ ᴛᴜ ʙᴏᴛ ᴄʟᴏɴᴀᴅᴏ 
 
-🔻 /broadcast - ʀᴇᴘʟʏ ᴛᴏ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴛᴏ ʙʀᴏᴀᴅᴄᴀsᴛ (ʙᴏᴛ ᴏᴡɴᴇʀ ᴏɴʟʏ)</b>"""
+🔻 /broadcast - ʀᴇsᴘᴏɴᴅᴇ ᴀ ᴇsᴛᴇ ᴄᴏᴍᴀɴᴅᴏ ᴄᴏɴ ᴜɴ ᴍᴇɴsᴀᴊᴇ ᴘᴀʀᴀ ᴛʀᴀɴsᴍɪᴛɪʀʟᴏ (sᴏʟᴏ ᴘᴀʀᴀ ᴇʟ ᴘʀᴏᴘɪᴇᴛᴀʀɪᴏ ᴅᴇʟ ʙᴏᴛ)</b>"""
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
 
 
-    CHELP_TXT = """<b>💢 Hᴏᴡ Tᴏ Usᴇ Tʜɪs Bᴏᴛ ☺️
+    CHELP_TXT = """<b>💢 Cóᴍᴏ Usᴀʀ Esᴛᴇ Bᴏᴛ ☺️
 
-🔻 /link - ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴠɪᴅᴇᴏ ᴏʀ ғɪʟᴇ ᴛᴏ ɢᴇᴛ sʜᴀʀᴀʙʟᴇ ʟɪɴᴋ
+🔻 /link - ʀᴇsᴘᴏɴᴅᴇ ᴀ ᴜɴ ᴠɪᴅᴇᴏ ᴏ ᴀʀᴄʜɪᴠᴏ ᴘᴀʀᴀ ᴏʙᴛᴇɴᴇʀ ᴜɴ ᴇɴʟᴀᴄᴇ ᴄᴏᴍᴘᴀʀᴛɪʙʟᴇ
 
-🔻 /base_site - ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴛᴏ sᴇᴛ ᴜʀʟ sʜᴏʀᴛɴᴇʀ ʟɪɴᴋ ᴅᴏᴍᴀɪɴ
-ᴇx - /base_site ʏᴏᴜʀᴅᴏᴍᴀɪɴ.ᴄᴏᴍ
+🔻 /base_site - ᴜsᴀ ᴇsᴛᴇ ᴄᴏᴍᴀɴᴅᴏ ᴘᴀʀᴀ ᴄᴏɴғɪɢᴜʀᴀʀ ᴇʟ ᴅᴏᴍɪɴɪᴏ ᴅᴇʟ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟs
+ᴇᴊ - /base_site ᴛᴜᴅᴏᴍɪɴɪᴏ.ᴄᴏᴍ
 
-🔻 /api - sᴇᴛ ʏᴏᴜʀ ᴜʀʟ sʜᴏʀᴛɴᴇʀ ᴀᴄᴄᴏᴜɴᴛ ᴀᴘɪ
-ᴇx - /api ʙᴀᴏᴡɢᴡᴋʟᴀᴀʙᴀᴋʟ
+🔻 /api - ᴄᴏɴғɪɢᴜʀᴀ ʟᴀ ᴀᴘɪ ᴅᴇ ᴛᴜ ᴄᴜᴇɴᴛᴀ ᴅᴇ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟs
+ᴇᴊ - /api ʙᴀᴏᴡɢᴡᴋʟᴀᴀʙᴀᴋʟ
 
-🔻 /broadcast - ʀᴇᴘʟʏ ᴛᴏ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴛᴏ ʙʀᴏᴀᴅᴄᴀsᴛ (ʙᴏᴛ ᴏᴡɴᴇʀ ᴏɴʟʏ)</b>"""
+🔻 /broadcast - ʀᴇsᴘᴏɴᴅᴇ ᴀ ᴇsᴛᴇ ᴄᴏᴍᴀɴᴅᴏ ᴄᴏɴ ᴜɴ ᴍᴇɴsᴀᴊᴇ ᴘᴀʀᴀ ᴛʀᴀɴsᴍɪᴛɪʀʟᴏ (sᴏʟᴏ ᴘᴀʀᴀ ᴇʟ ᴘʀᴏᴘɪᴇᴛᴀʀɪᴏ ᴅᴇʟ ʙᴏᴛ)</b>"""
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
 
-    LOG_TEXT = """<b>#NewUser
+    LOG_TEXT = """<b>#NuevoUsuario
     
 ID - <code>{}</code>
 
-Nᴀᴍᴇ - {}</b>
+Nᴏᴍʙʀᴇ - {}</b>
 """
     RESTART_TXT = """
-<b>Bᴏᴛ Rᴇsᴛᴀʀᴛᴇᴅ !
+<b>Bᴏᴛ Rᴇɪɴɪᴄɪᴀᴅᴏ !
 
-📅 Dᴀᴛᴇ : <code>{}</code>
-⏰ Tɪᴍᴇ : <code>{}</code>
-🌐 Tɪᴍᴇᴢᴏɴᴇ : <code>Asia/Kolkata</code>
-🛠️ Bᴜɪʟᴅ Sᴛᴀᴛᴜs: <code>v2.7.1 [ Sᴛᴀʙʟᴇ ]</code></b>"""
+📅 Fᴇᴄʜᴀ : <code>{}</code>
+⏰ Hᴏʀᴀ : <code>{}</code>
+🌐 Zᴏɴᴀ Hᴏʀᴀʀɪᴀ : <code>Asia/Kolkata</code>
+🛠️ Esᴛᴀᴅᴏ ᴅᴇ Cᴏɴsᴛʀᴜᴄᴄɪóɴ: <code>v2.7.1 [ Esᴛᴀʙʟᴇ ]</code></b>"""
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# No Eliminar Crédito Tg - @VJ_Botz
+# Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
+# Pregunta Dudas en telegram @KingVJ01
