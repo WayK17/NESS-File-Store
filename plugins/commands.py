@@ -63,12 +63,7 @@ async def start(client, message):
             InlineKeyboardButton('🔍 Grupo de Soporte', url='https://t.me/NESS_Soporte'),
             InlineKeyboardButton('🪨 Nuestro Canal', url='https://t.me/NessCloud')
             ]]
-        if CLONE_MODE == False:
-            buttons.append([InlineKeyboardButton('🤖 ᴄʀᴇᴀᴛᴇ ʏᴏᴜʀ ᴏᴡɴ ᴄʟᴏɴᴇ ʙᴏᴛ', callback_data='clone')])
-        reply_markup = InlineKeyboardMarkup(buttons)
-        me = client.me
-        await message.reply_photo(
-            photo=random.choice(PICS),
+        if CLONE_MODE == False:            
             caption=script.START_TXT.format(message.from_user.mention, me.mention),
             reply_markup=reply_markup
         )
@@ -89,7 +84,7 @@ async def start(client, message):
         token = data.split("-", 3)[2]
         if str(message.from_user.id) != str(userid):
             return await message.reply_text(
-                text="<b>Invalid link or Expired link !</b>",
+                text="<b>¡Enlace No Válido o Enlace Caducado!</b>",
                 protect_content=True
             )
         is_valid = await check_token(client, userid, token)
@@ -101,7 +96,7 @@ async def start(client, message):
             await verify_user(client, userid, token)
         else:
             return await message.reply_text(
-                text="<b>Invalid link or Expired link !</b>",
+                text="<b>¡Enlace No Válido o Enlace Caducado!</b>",
                 protect_content=True
             )
     elif data.split("-", 1)[0] == "BATCH":
@@ -120,7 +115,7 @@ async def start(client, message):
                 return
         except Exception as e:
             return await message.reply_text(f"**Error - {e}**")
-        sts = await message.reply("**🔺 ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ**")
+        sts = await message.reply("**🔺 Espere**")
         file_id = data.split("-", 1)[1]
         msgs = BATCH_FILES.get(file_id)
         if not msgs:
