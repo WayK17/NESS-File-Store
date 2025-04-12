@@ -291,19 +291,34 @@ async def base_site_handler(client, m: Message):
     user_id = m.from_user.id
     user = await get_user(user_id)
     cmd = m.command
-    text = f"`/base_site (base_site)`\n\n<b>Current base site: None\n\n EX:</b> `/base_site shortnerdomain.com`\n\nIf You Want To Remove Base Site Then Copy This And Send To Bot - `/base_site None`"
+    current_site = user.get("base_site", "None")  # Obtener valor actual
+    text = (
+        "`/base_site (base_site)`\n\n"
+        f"**Current base site:** {current_site}\n\n"
+        "**Ejemplo:** `/base_site shortnerdomain.com`\n\n"
+        "Para eliminar el base site envía: `/base_site None`"
+    )
+
     if len(cmd) == 1:
         return await m.reply(text=text, disable_web_page_preview=True)
+    
     elif len(cmd) == 2:
-        base_site = cmd[1].strip()
-        if base_site == None:
-            await update_user_info(user_id, {"base_site": base_site})
-            return await m.reply("<b>Base Site updated successfully</b>")
-            
+        base_site = cmd[1].strip().lower()  # Convertir a minúsculas
+
+        # Caso: Eliminar base_site
+        if base_site == "none":
+            await update_user_info(user_id, {"base_site": None})  # None de Python
+            return await m.reply("<b>✅ Base Site eliminado correctamente</b>")
+
+        # Validar dominio solo si no es "none"
         if not domain(base_site):
             return await m.reply(text=text, disable_web_page_preview=True)
+
         await update_user_info(user_id, {"base_site": base_site})
-        await m.reply("<b>Base Site updated successfully</b>")
+        await m.reply("<b>✅ Base Site actualizado correctamente</b>")
+
+    else:
+        await m.reply("<b>❌ No tienes permisos para este comando</b>") 
 
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
