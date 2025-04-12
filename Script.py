@@ -15,7 +15,7 @@ class script(object):
 
 ⚙️ Tamaño: {file_size}
 
-𝖩𝗈𝗂𝗇➥ [「Nᴇss Cʟᴏᴜᴅ」](https://t.me/NessCloud)</b>""" 
+[「Nᴇss Cʟᴏᴜᴅ」](https://t.me/NessCloud)</b>""" 
 
 # No Eliminar Crédito Tg - @VJ_Botz
 # Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
