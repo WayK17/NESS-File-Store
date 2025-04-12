@@ -63,6 +63,15 @@ async def start(client, message):
             InlineKeyboardButton('🔍 Grupo de Soporte', url='https://t.me/NESS_Soporte'),
             InlineKeyboardButton('🪨 Nuestro Canal', url='https://t.me/NessCloud')
             ]]
+        if CLONE_MODE == False:
+            buttons.append([InlineKeyboardButton('', callback_data='clone')])
+        reply_markup = InlineKeyboardMarkup(buttons)
+        me = client.me
+        await message.reply_photo(
+            photo=random.choice(PICS),
+            caption=script.START_TXT.format(message.from_user.mention, me.mention),
+            reply_markup=reply_markup
+        )
         return
 
 # Don't Remove Credit Tg - @VJ_Botz
