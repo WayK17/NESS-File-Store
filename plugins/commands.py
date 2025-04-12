@@ -60,9 +60,9 @@ async def start(client, message):
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT.format(message.from_user.id, message.from_user.mention))
     if len(message.command) != 2:
         buttons = [[
-            InlineKeyboardButton('🔍 Grupo de Soporte', url='https://t.me/NESS_Soporte')
+            InlineKeyboardButton('Únete a Nuestro Canal', url='https://t.me/NessCloud')
             ],[
-            InlineKeyboardButton('🪨 Nuestro Canal', url='https://t.me/NessCloud')
+            InlineKeyboardButton('⚠️ Grupo de Soporte', url='https://t.me/NESS_Soporte')
             ]]
         if CLONE_MODE == False:
             buttons.append([InlineKeyboardButton('', callback_data='clone')])
