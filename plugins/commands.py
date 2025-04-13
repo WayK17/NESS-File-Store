@@ -104,15 +104,15 @@ async def start(client, message):
 
                 # Construir los botones
                 buttons = [
-                    [InlineKeyboardButton("📣 Unirme al Canal 📣", url=FORCE_SUB_INVITE_LINK)]
+                    [InlineKeyboardButton("Unirme al Canal 📣", url=FORCE_SUB_INVITE_LINK)]
                 ]
                 try:
                     # Añadir botón 'Intentar de Nuevo' que re-ejecuta el comando /start (con payload si existe)
                     start_payload = message.command[1]
-                    buttons.append([InlineKeyboardButton("🔄 Intentar de Nuevo 🔄", url=f"https://t.me/{client.me.username}?start={start_payload}")])
+                    buttons.append([InlineKeyboardButton("↻ Intentar de Nuevo", url=f"https://t.me/{client.me.username}?start={start_payload}")])
                 except IndexError:
                     # Si el comando era solo /start (sin payload)
-                    buttons.append([InlineKeyboardButton("🔄 Intentar de Nuevo 🔄", url=f"https://t.me/{client.me.username}?start")])
+                    buttons.append([InlineKeyboardButton("↻ Intentar de Nuevo", url=f"https://t.me/{client.me.username}?start")])
 
                 # Enviar el mensaje para forzar suscripción (usa el texto de Script.py)
                 await message.reply_text(
@@ -158,7 +158,7 @@ async def start(client, message):
         # Lógica original para el botón de clonar
         if CLONE_MODE == False:
             # Considera añadir texto al botón si quieres que sea visible
-            buttons.append([InlineKeyboardButton('🤖 Clonar Bot', callback_data='clone')]) # Añadí texto como ejemplo
+            buttons.append([InlineKeyboardButton('', callback_data='clone')]) # Añadí texto como ejemplo
         reply_markup = InlineKeyboardMarkup(buttons)
         me = client.me
         # Lógica original para enviar foto de bienvenida
