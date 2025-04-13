@@ -143,6 +143,27 @@ Nᴏᴍʙʀᴇ - {}</b>
 🌐 Zᴏɴᴀ Hᴏʀᴀʀɪᴀ : <code>Asia/Kolkata</code>
 🛠️ Esᴛᴀᴅᴏ ᴅᴇ Cᴏɴsᴛʀᴜᴄᴄɪóɴ: <code>v2.7.1 [ Esᴛᴀʙʟᴇ ]</code></b>"""
 
+
+# Script.py
+
+class script(object):
+    # ... (todos los otros textos: START_TXT, CAPTION, HELP_TXT, etc.) ...
+
+    # --- MENSAJE PARA FORZAR SUSCRIPCIÓN ---
+    FORCE_MSG = """<b>⚠️ Acceso Restringido ⚠️</b>
+
+Hola {mention} 👋!
+
+Para poder usar todas las funciones de este bot, es necesario que te unas a nuestro canal principal haciendo clic en el botón de abajo.
+
+📣 Una vez que te hayas unido, por favor, presiona el botón '🔄 Intentar de Nuevo'.
+
+¡Gracias por tu apoyo! 😊"""
+
+    # ... (resto de la clase si hay más) ...
+
+
+
 # No Eliminar Crédito Tg - @VJ_Botz
 # Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
 # Pregunta Dudas en telegram @KingVJ01
