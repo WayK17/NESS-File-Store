@@ -174,7 +174,7 @@ async def delete_broadcast_handler(client, message):
 
     replied_message = message.reply_to_message
     total_users = await db.total_users_count()
-    users_cursor = db.get_all_users() # Obtiene el cursor de usuarios
+    users_cursor = await db.get_all_users() # ¡AQUÍ ESTÁ EL CAMBIO!
 
     # Mensaje inicial al admin
     broadcast_info_text = (
