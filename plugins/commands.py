@@ -22,6 +22,12 @@ from urllib.parse import quote_plus
 from TechVJ.utils.file_properties import get_name, get_hash, get_media_file_size
 logger = logging.getLogger(__name__)
 
+# ... (Asegúrate de tener estas importaciones al principio del archivo) ...
+from pyrogram import Client, filters, enums
+from config import ADMINS  # Necesitamos la lista de ADMINS
+from plugins.dbusers import db  # Necesitamos la base de datos de usuarios
+import logging # Para registrar errores si ocurren
+
 # plugins/commands.py
 
 # ... (tus importaciones existentes como os, logging, random, asyncio, etc.) ...
