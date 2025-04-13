@@ -22,6 +22,32 @@ from urllib.parse import quote_plus
 from TechVJ.utils.file_properties import get_name, get_hash, get_media_file_size
 logger = logging.getLogger(__name__)
 
+# plugins/commands.py
+
+# ... (tus importaciones existentes como os, logging, random, asyncio, etc.) ...
+from pyrogram import Client, filters, enums # Asegúrate que 'enums' esté importado
+from pyrogram.errors import ChatAdminRequired, FloodWait
+# Nuevas importaciones para Force Subscribe y botones:
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+# Importa las configuraciones necesarias desde config.py
+from config import (LOG_CHANNEL, CLONE_MODE, PICS, VERIFY_MODE,
+                    VERIFY_TUTORIAL, STREAM_MODE, URL, CUSTOM_FILE_CAPTION,
+                    BATCH_FILE_CAPTION, AUTO_DELETE_MODE, AUTO_DELETE_TIME,
+                    # Variables para Force Subscribe:
+                    FORCE_SUB_ENABLED, FORCE_SUB_CHANNEL, FORCE_SUB_INVITE_LINK,
+                    SKIP_FORCE_SUB_FOR_ADMINS, ADMINS)
+
+# Importa la clase 'script' para los textos
+from Script import script
+
+# Importa la base de datos de usuarios y la nueva función de utils
+from plugins.dbusers import db
+from plugins.utils import check_user_membership # <<<--- IMPORTA LA FUNCIÓN DE utils.py
+
+# ... (el resto de tus importaciones existentes como users_api, etc.) ...
+
+
 BATCH_FILES = {}
 
 # Don't Remove Credit Tg - @VJ_Botz
