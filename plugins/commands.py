@@ -47,7 +47,7 @@ from Script import script
 
 # Importa la base de datos de usuarios y la nueva función de utils
 from plugins.dbusers import db
-from plugins.utils import check_user_membership # <<<--- IMPORTA LA FUNCIÓN DE utils.py
+from utils import check_user_membership # <<<--- IMPORTA LA FUNCIÓN DE utils.py
 
 # ... (el resto de tus importaciones existentes como users_api, etc.) ...
 
