@@ -31,8 +31,6 @@ import logging # Para registrar errores si ocurren
 # plugins/commands.py
 
 # ... (tus importaciones existentes como os, logging, random, asyncio, etc.) ...
-from pyrogram import Client, filters, enums # Asegúrate que 'enums' esté importado
-from pyrogram.errors import ChatAdminRequired, FloodWait
 # Nuevas importaciones para Force Subscribe y botones:
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
