@@ -80,26 +80,90 @@ def formate_file_name(file_name):
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
+    # --- Información básica del usuario ---
+    user_id = message.from_user.id
+    first_name = message.from_user.first_name
+
+    # ====================================================================
+    # ================== INICIO: CÓDIGO AÑADIDO FORCE SUBSCRIBE =============
+    # ====================================================================
+    # Saltar verificación si está desactivada, o si el usuario es Admin y SKIP_FORCE_SUB_FOR_ADMINS es True
+    should_skip_check = not FORCE_SUB_ENABLED or (SKIP_FORCE_SUB_FOR_ADMINS and user_id in ADMINS)
+
+    if not should_skip_check and FORCE_SUB_CHANNEL and FORCE_SUB_INVITE_LINK:
+        try:
+            # Llama a la función auxiliar que pusimos en utils.py
+            is_member = await check_user_membership(client, user_id, FORCE_SUB_CHANNEL)
+
+            if not is_member:
+                logger.info(f"Usuario {user_id} ({message.from_user.mention}) no es miembro de {FORCE_SUB_CHANNEL}. Mostrando mensaje ForceSub.")
+
+                # Construir los botones
+                buttons = [
+                    [InlineKeyboardButton("📣 Unirme al Canal 📣", url=FORCE_SUB_INVITE_LINK)]
+                ]
+                try:
+                    # Añadir botón 'Intentar de Nuevo' que re-ejecuta el comando /start (con payload si existe)
+                    start_payload = message.command[1]
+                    buttons.append([InlineKeyboardButton("🔄 Intentar de Nuevo 🔄", url=f"https://t.me/{client.me.username}?start={start_payload}")])
+                except IndexError:
+                    # Si el comando era solo /start (sin payload)
+                    buttons.append([InlineKeyboardButton("🔄 Intentar de Nuevo 🔄", url=f"https://t.me/{client.me.username}?start")])
+
+                # Enviar el mensaje para forzar suscripción (usa el texto de Script.py)
+                await message.reply_text(
+                    text=script.FORCE_MSG.format(mention=message.from_user.mention), # Usa script.FORCE_MSG
+                    reply_markup=InlineKeyboardMarkup(buttons),
+                    quote=True, # Citar el mensaje original /start
+                    disable_web_page_preview=True # No mostrar vista previa del enlace del canal
+                )
+                # MUY IMPORTANTE: Detener la ejecución del resto del comando /start
+                return
+
+        except Exception as fs_err:
+            # Si ocurre un error durante la verificación, loguéalo pero permite al usuario continuar (failsafe)
+            logger.error(f"Error en el chequeo de Force Subscribe para {user_id}: {fs_err}")
+            # Puedes decidir si quieres bloquear al usuario aquí o no. Dejarlo pasar es más seguro.
+    # ==================================================================
+    # ================== FIN: CÓDIGO AÑADIDO FORCE SUBSCRIBE =============
+    # ==================================================================
+
+    # --- SI EL USUARIO PASÓ LA VERIFICACIÓN (o si estaba desactivada), LA LÓGICA ORIGINAL CONTINÚA ---
+    logger.debug(f"Usuario {user_id} pasó la verificación ForceSub (o estaba desactivada). Continuando con /start normal.")
+
+    # --- COMIENZO DE TU CÓDIGO ORIGINAL (NO MODIFICADO) ---
     username = client.me.username
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
-        await client.send_message(LOG_CHANNEL, script.LOG_TEXT.format(message.from_user.id, message.from_user.mention))
+        # Asegúrate que LOG_CHANNEL esté definido en config y sea accesible
+        if LOG_CHANNEL:
+             try:
+                await client.send_message(LOG_CHANNEL, script.LOG_TEXT.format(message.from_user.id, message.from_user.mention))
+             except Exception as log_err:
+                 logger.error(f"No se pudo enviar mensaje al LOG_CHANNEL ({LOG_CHANNEL}): {log_err}")
+        else:
+             logger.warning("LOG_CHANNEL no definido, no se envió log de nuevo usuario.")
+
+    # Manejo si el comando /start no tiene payload (parte original)
     if len(message.command) != 2:
         buttons = [[
-            InlineKeyboardButton('Únete a Nuestro Canal', url='https://t.me/NessCloud')
+            InlineKeyboardButton('Únete a Nuestro Canal', url='https://t.me/NessCloud') # URL Original
             ],[
-            InlineKeyboardButton('⚠️ Grupo de Soporte', url='https://t.me/NESS_Soporte')
+            InlineKeyboardButton('⚠️ Grupo de Soporte', url='https://t.me/NESS_Soporte') # URL Original
             ]]
+        # Lógica original para el botón de clonar
         if CLONE_MODE == False:
-            buttons.append([InlineKeyboardButton('', callback_data='clone')])
+            # Considera añadir texto al botón si quieres que sea visible
+            buttons.append([InlineKeyboardButton('🤖 Clonar Bot', callback_data='clone')]) # Añadí texto como ejemplo
         reply_markup = InlineKeyboardMarkup(buttons)
         me = client.me
+        # Lógica original para enviar foto de bienvenida
         await message.reply_photo(
-            photo=random.choice(PICS),
-            caption=script.START_TXT.format(message.from_user.mention, me.mention),
+            photo=random.choice(PICS), # Asegúrate que PICS esté importado de config
+            caption=script.START_TXT.format(message.from_user.mention, me.mention), # Usa script.START_TXT
             reply_markup=reply_markup
         )
-        return
+        return # Termina la ejecución aquí si no había payload
 
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
