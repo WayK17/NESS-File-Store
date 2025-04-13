@@ -178,9 +178,9 @@ async def delete_broadcast_handler(client, message):
 
     # Mensaje inicial al admin
     broadcast_info_text = (
-        f"📢 Iniciando broadcast con auto-borrado...\n"
-        f"⏳ Retraso de borrado: {BROADCAST_DELETE_DELAY} segundos.\n"
-        f"👥 Total de usuarios estimados: {total_users}"
+        f"**Iniciando Broadcast Auto-Delete**\n"
+        f"⏳ Auto-Delete: {BROADCAST_DELETE_DELAY} segundos.\n"
+        f"👥 Usuarios: {total_users}"
     )
     broadcast_info_msg = await message.reply_text(broadcast_info_text, quote=True)
 
@@ -243,7 +243,7 @@ async def delete_broadcast_handler(client, message):
         if processed_count % update_interval_db == 0:
             try:
                 update_text = (
-                    f"📢 Transmitiendo con auto-borrado...\n"
+                    f"**Transmitiendo con Auti-Delete**\n"
                     f"⏳ Retraso: {BROADCAST_DELETE_DELAY}s\n"
                     f"👥 Procesados: {processed_count}/{total_users}\n"
                     f"✅ Éxito: {success_count}\n"
@@ -265,11 +265,11 @@ async def delete_broadcast_handler(client, message):
     # Mensaje final al admin
     time_taken_db = datetime.timedelta(seconds=int(time.time()-start_time_db))
     final_summary_text_db = (
-        f"✅ Broadcast con Auto-Borrado completado.\n"
+        f"**Broadcast con Auto-Borrado completado.**\n"
         f"⏱️ Tiempo total: {time_taken_db}\n\n"
-        f"▶️ Mensajes enviados con éxito: {success_count}\n"
-        f"▶️ Fallos al enviar: {failed_count}\n"
-        f"👤 Total de usuarios procesados: {processed_count}"
+        f"✅ Éxito: {success_count}\n"
+        f"❌ Fallo: {failed_count}\n"
+        f"👤 Total Usuarios: {processed_count}"
     )
     try:
         # Evitar editar si el mensaje fue eliminado mientras tanto
