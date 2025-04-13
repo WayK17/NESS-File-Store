@@ -87,7 +87,7 @@ URL = environ.get("URL", "https://testofvjfilter-1fa60b1b8498.herokuapp.com/")
 #      CONFIGURACIÓN FORCE SUBSCRIBE
 # ==========================================
 # Activar/Desactivar la función (True o False)
-FORCE_SUB_ENABLED = is_enabled(environ.get('FORCE_SUB_ENABLED', "True"), False)
+FORCE_SUB_ENABLED = is_enabled(environ.get('FORCE_SUB_ENABLED', "True"), True)
 
 # ID numérico o @username del canal al que deben unirse. ¡El bot DEBE ser admin aquí!
 # Ejemplo: FORCE_SUB_CHANNEL = -10012345678**  o  FORCE_SUB_CHANNEL = "MiCanal"
