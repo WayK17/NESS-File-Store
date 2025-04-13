@@ -74,7 +74,7 @@ async def check_verification(bot, userid):
             return True
     else:
         return False
- --------------------------------------------------------------------------
+ #--------------------------------------------------------------------------
 
 # ... (el resto de tu código existente en utils.py: get_verify_shorted_link, check_token, etc.) ...
 
