@@ -148,10 +148,9 @@ Nᴏᴍʙʀᴇ - {}</b>
     FORCE_MSG = """<b>⚠️ Acceso Restringido ⚠️</b>
 
 Hola {mention} 👋!
+⚠️ Debes ser miembro del CANAL para acceder a estos archivos.
 
-Para poder usar todas las funciones de este bot, es necesario que te unas a nuestro canal principal haciendo clic en el botón de abajo.
-
-📣 Una vez que te hayas unido, por favor, presiona el botón '🔄 Intentar de Nuevo'.
+📣 Una vez que te hayas unido, por favor, presiona el botón 'Intentar de Nuevo'.
 
 ¡Gracias por tu apoyo! 😊"""
 
