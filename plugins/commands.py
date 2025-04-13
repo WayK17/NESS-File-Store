@@ -414,6 +414,43 @@ async def base_site_handler(client, m: Message):
     else:
         await m.reply("<b>❌ No tienes permisos para este comando</b>") 
 
+
+# ==============================================================
+# ============ INICIO: NUEVO COMANDO /STATS (SOLO USUARIOS) =====
+# ==============================================================
+
+@Client.on_message(filters.command("stats") & filters.private)
+async def simple_stats_command(client, message):
+    # 1. Verificar si el usuario es Administrador
+    if message.from_user.id not in ADMINS:
+        # Si no es admin, envía un mensaje y no hagas nada más
+        return await message.reply_text("❌ **Acceso denegado.** Este comando es solo para administradores.")
+
+    try:
+        # 2. Mostrar acción de "escribiendo..." (opcional, da feedback visual)
+        await client.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
+
+        # 3. Obtener el contador total de usuarios desde dbusers.py
+        total_users = await db.total_users_count()
+
+        # 4. Formatear el texto de respuesta exactamente como lo pediste
+        stats_text = (
+            f"📊 **Estadísticas de la Base de Datos:**\n\n"
+            f"👥 Usuarios: `{total_users}`"
+        )
+
+        # 5. Enviar la respuesta
+        await message.reply_text(stats_text, quote=True)
+
+    except Exception as e:
+        # 6. Manejo de errores básico
+        logger.error(f"Error en el comando /stats (simple): {e}")
+        await message.reply_text(" Ocurrió un error al obtener las estadísticas.")
+
+# ==============================================================
+# ============ FIN: NUEVO COMANDO /STATS (SOLO USUARIOS) =======
+# ==============================================================
+
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
