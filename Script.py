@@ -145,9 +145,9 @@ Nᴏᴍʙʀᴇ - {}</b>
 
 
     # --- MENSAJE PARA FORZAR SUSCRIPCIÓN ---
-    FORCE_MSG = """<b> Acceso Restringido 🗿</b>
+    FORCE_MSG = """<blockquote><b> Acceso Restringido ⚠️</b>
 
-<blockquote><b>Hola {mention} 👋!
+<b>Hola {mention} 👋!
 Debes ser miembro del CANAL
 para acceder a estos archivos.
 
