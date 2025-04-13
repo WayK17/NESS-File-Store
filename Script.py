@@ -145,12 +145,15 @@ Nᴏᴍʙʀᴇ - {}</b>
 
 
     # --- MENSAJE PARA FORZAR SUSCRIPCIÓN ---
-    FORCE_MSG = """<b>⚠️ Acceso Restringido ⚠️</b>
+    FORCE_MSG = """<b> Acceso Restringido 🗿</b>
 
 <blockquote><b>Hola {mention} 👋!
-Debes ser miembro del CANAL para acceder a estos archivos.
+Debes ser miembro del CANAL
+para acceder a estos archivos.
 
-📣 Una vez que te hayas unido, por favor, presiona el botón 'Intentar de Nuevo'.
+📣 Una vez que te hayas unido,
+por favor, presiona el botón 
+'Intentar de Nuevo'.
 
 ¡Gracias por tu apoyo! 😊</b></blockquote>"""
 
