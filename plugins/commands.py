@@ -109,10 +109,10 @@ async def start(client, message):
                 try:
                     # Añadir botón 'Intentar de Nuevo' que re-ejecuta el comando /start (con payload si existe)
                     start_payload = message.command[1]
-                    buttons.append([InlineKeyboardButton("↻ Intentar de Nuevo", url=f"https://t.me/{client.me.username}?start={start_payload}")])
+                    buttons.append([InlineKeyboardButton("Intentar de Nuevo ↻", url=f"https://t.me/{client.me.username}?start={start_payload}")])
                 except IndexError:
                     # Si el comando era solo /start (sin payload)
-                    buttons.append([InlineKeyboardButton("↻ Intentar de Nuevo", url=f"https://t.me/{client.me.username}?start")])
+                    buttons.append([InlineKeyboardButton("Intentar de Nuevo ↻", url=f"https://t.me/{client.me.username}?start")])
 
                 # Enviar el mensaje para forzar suscripción (usa el texto de Script.py)
                 await message.reply_text(
