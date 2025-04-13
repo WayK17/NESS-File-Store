@@ -2,6 +2,7 @@ import logging, asyncio, os, re, random, pytz, aiohttp, requests, string, json, 
 from datetime import date, datetime
 from config import SHORTLINK_API, SHORTLINK_URL
 from shortzy import Shortzy
+from pyrogram.errors import UserNotParticipant, ChatAdminRequired, ChatWriteForbidden
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
