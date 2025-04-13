@@ -144,11 +144,6 @@ Nᴏᴍʙʀᴇ - {}</b>
 🛠️ Esᴛᴀᴅᴏ ᴅᴇ Cᴏɴsᴛʀᴜᴄᴄɪóɴ: <code>v2.7.1 [ Esᴛᴀʙʟᴇ ]</code></b>"""
 
 
-# Script.py
-
-class script(object):
-    # ... (todos los otros textos: START_TXT, CAPTION, HELP_TXT, etc.) ...
-
     # --- MENSAJE PARA FORZAR SUSCRIPCIÓN ---
     FORCE_MSG = """<b>⚠️ Acceso Restringido ⚠️</b>
 
