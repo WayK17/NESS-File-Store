@@ -83,6 +83,26 @@ else:
 URL = environ.get("URL", "https://testofvjfilter-1fa60b1b8498.herokuapp.com/")
 
 
+# ==========================================
+#      CONFIGURACIÓN FORCE SUBSCRIBE
+# ==========================================
+# Activar/Desactivar la función (True o False)
+FORCE_SUB_ENABLED = is_enabled(environ.get('FORCE_SUB_ENABLED', "False"), False)
+
+# ID numérico o @username del canal al que deben unirse. ¡El bot DEBE ser admin aquí!
+# Ejemplo: FORCE_SUB_CHANNEL = -1001234567890  o  FORCE_SUB_CHANNEL = "MiCanal"
+FORCE_SUB_CHANNEL = environ.get('FORCE_SUB_CHANNEL', "")
+
+# Enlace de invitación del canal (si es privado o quieres usar uno específico)
+# Ejemplo: FORCE_SUB_INVITE_LINK = "https://t.me/joinchat/ABCDEFGHIJKL12345"
+# Si el canal es público, puedes poner el enlace normal (e.g., "https://t.me/MiCanal")
+FORCE_SUB_INVITE_LINK = environ.get('FORCE_SUB_INVITE_LINK', "")
+
+# Opcional: Permitir que los admins del bot salten la verificación (True o False)
+SKIP_FORCE_SUB_FOR_ADMINS = is_enabled(environ.get('SKIP_FORCE_SUB_FOR_ADMINS', "True"), True)
+
+
+
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
