@@ -83,6 +83,13 @@ else:
 URL = environ.get("URL", "https://testofvjfilter-1fa60b1b8498.herokuapp.com/")
 
 
+# CONFIGURACIÓN BROADCAST CON AUTO-BORRADO
+# ==========================================
+# Tiempo en segundos que el mensaje permanecerá visible antes de ser borrado.
+# Default: 3600 segundos = 1 hora
+BROADCAST_DELETE_DELAY = int(environ.get("BROADCAST_DELETE_DELAY", "300"))
+
+
 # ==========================================
 #      CONFIGURACIÓN FORCE SUBSCRIBE
 # ==========================================
