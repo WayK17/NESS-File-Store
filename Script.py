@@ -4,18 +4,18 @@
 
 
 class script(object):
-    START_TXT = """<b>ʜᴏʟᴀ {}, ᴍɪ ɴᴏᴍʙʀᴇ ᴇs {} 👋, sᴏʏ ᴜɴ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ ᴀʀᴄʜɪᴠᴏs ᴀᴠᴀɴᴢᴀᴅᴏ ʏ ᴘᴏᴛᴇɴᴛᴇ + ғᴜɴᴄɪᴏɴᴀʟɪᴅᴀᴅ ᴅᴇ ᴄʟᴏɴᴀᴄɪóɴ + ғᴜɴᴄɪᴏɴᴀʟɪᴅᴀᴅ ᴅᴇ ᴇɴʟᴀᴄᴇ ᴅᴇ ᴛʀᴀɴsᴍɪsɪóɴ / ᴅᴇsᴄᴀʀɢᴀ + sᴏᴘᴏʀᴛᴇ ᴅᴇ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ᴘᴇʀsᴏɴᴀʟɪᴢᴀᴅᴏ + sᴏᴘᴏʀᴛᴇ ᴅᴇ ᴇʟɪᴍɪɴᴀᴄɪóɴ ᴀᴜᴛᴏᴍáᴛɪᴄᴀ ʏ ᴍᴇᴊᴏʀ ʀᴇɴᴅɪᴍɪᴇɴᴛᴏ ᴅᴇ ɪɴᴛᴇʀғᴀᴢ ᴅᴇ ᴜsᴜᴀʀɪᴏ</b>"""
+    START_TXT = """<b>!Hola {} 👋!, Bienvenido a Nuestro Bot de Almacenamiento de Archivos.</b>"""
 
 # No Eliminar Crédito Tg - @VJ_Botz
 # Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
 # Pregunta Dudas en telegram @KingVJ01
 
 
-    CAPTION = """<b>📂 ɴᴏᴍʙʀᴇ ᴅᴇʟ ᴀʀᴄʜɪᴠᴏ : {file_name}
+    CAPTION = """<b>📂 Nombre Del Archivo: {file_name}
 
-⚙️ ᴛᴀᴍᴀñᴏ : {file_size}
+⚙️ Tamaño: {file_size}
 
-Úɴᴇᴛᴇ ᴀʟ [ᴄᴀɴᴀʟ ᴅᴇ ᴀᴄᴛᴜᴀʟɪᴢᴀᴄɪᴏɴᴇs](https://t.me/vj_botz)</b>""" 
+[「Nᴇss Cʟᴏᴜᴅ」](https://t.me/NessCloud)</b>""" 
 
 # No Eliminar Crédito Tg - @VJ_Botz
 # Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
@@ -43,28 +43,28 @@ sɪ ǫᴜɪᴇʀᴇs ᴇsᴛᴀ ᴄᴀʀᴀᴄᴛᴇʀísᴛɪᴄᴀ, ᴄʀᴇ�
 # Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
 # Pregunta Dudas en telegram @KingVJ01
 
-    ABOUT_TXT = """<b>ʜᴏʟᴀ sᴏʏ ᴜɴ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ ᴀʀᴄʜɪᴠᴏs ᴘᴇʀᴍᴀɴᴇɴᴛᴇ ᴄᴏɴ ғᴜɴᴄɪóɴ ᴅᴇ ᴄʟᴏɴᴀᴄɪóɴ + ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ᴘᴇʀsᴏɴᴀʟɪᴢᴀᴅᴏ ʟᴏ ǫᴜᴇ sɪɢɴɪғɪᴄᴀ ǫᴜᴇ ᴄᴜᴀʟǫᴜɪᴇʀ ᴜsᴜᴀʀɪᴏ ᴘᴜᴇᴅᴇ ᴄᴏɴғɪɢᴜʀᴀʀ sᴜ ᴘʀᴏᴘɪᴏ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ʏ + ᴇʟɪᴍɪɴᴀᴄɪóɴ ᴀᴜᴛᴏᴍáᴛɪᴄᴀ.
+    ABOUT_TXT = """<b> Hola Soy un Bot de Almacenamiento de Archivos Permanentes. 
 
 🤖 ᴍɪ ɴᴏᴍʙʀᴇ: {}
 
-📝 ʟᴇɴɢᴜᴀᴊᴇ: <a href=https://www.python.org>𝐏𝐲𝐭𝐡𝐨𝐧𝟑</a>
+📝 ʟᴇɴɢᴜᴀᴊᴇ: <a href=https://www.python.org>Python3</a>
 
-📚 ʙɪʙʟɪᴏᴛᴇᴄᴀ: <a href=https://docs.pyrogram.org>𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦</a>
+📚 ʙɪʙʟɪᴏᴛᴇᴄᴀ: <a href=https://docs.pyrogram.org>Pyrogram</a>
 
-🧑🏻‍💻 ᴅᴇsᴀʀʀᴏʟʟᴀᴅᴏʀ: <a href=https://t.me/Kingvj01>𝐓𝐞𝐜𝐡 𝐕𝐉</a>
+🧑🏻‍💻 ᴅᴇsᴀʀʀᴏʟʟᴀᴅᴏʀ: <a href=https://t.me/WayK17X></a>
 
-👥 ɢʀᴜᴘᴏ ᴅᴇ sᴏᴘᴏʀᴛᴇ: <a href=https://t.me/VJ_Bot_Disscussion>𝐕𝐉 𝐒𝐨𝐩𝐨𝐫𝐭𝐞</a>
+👥 ɢʀᴜᴘᴏ ᴅᴇ sᴏᴘᴏʀᴛᴇ: <a href=https://t.me/NESS_Soporte></a>
 
-📢 ᴄᴀɴᴀʟ ᴅᴇ ᴀᴄᴛᴜᴀʟɪᴢᴀᴄɪᴏɴᴇs: <a href=https://t.me/vj_botz>𝐕𝐉 𝐀𝐜𝐭𝐮𝐚𝐥𝐢𝐳𝐚𝐜𝐢𝐨𝐧𝐞𝐬</a></b>
+📢 ᴄᴀɴᴀʟ ᴅᴇ ᴀᴄᴛᴜᴀʟɪᴢᴀᴄɪᴏɴᴇs: <a href=https://t.me/NessCloud>Nᴇss Cʟᴏᴜᴅ</a></b>
 """
 
-    CABOUT_TXT = """<b>ʜᴏʟᴀ sᴏʏ ᴜɴ ʙᴏᴛ ᴅᴇ ᴀʟᴍᴀᴄᴇɴᴀᴍɪᴇɴᴛᴏ ᴅᴇ ᴀʀᴄʜɪᴠᴏs ᴘᴇʀᴍᴀɴᴇɴᴛᴇ ᴄᴏɴ ғᴜɴᴄɪóɴ ᴅᴇ ᴄʟᴏɴᴀᴄɪóɴ + ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ᴘᴇʀsᴏɴᴀʟɪᴢᴀᴅᴏ ʟᴏ ǫᴜᴇ sɪɢɴɪғɪᴄᴀ ǫᴜᴇ ᴄᴜᴀʟǫᴜɪᴇʀ ᴜsᴜᴀʀɪᴏ ᴘᴜᴇᴅᴇ ᴄᴏɴғɪɢᴜʀᴀʀ sᴜ ᴘʀᴏᴘɪᴏ ᴀᴄᴏʀᴛᴀᴅᴏʀ ᴅᴇ ᴜʀʟ ʏ + ᴇʟɪᴍɪɴᴀᴄɪóɴ ᴀᴜᴛᴏᴍáᴛɪᴄᴀ.
+    CABOUT_TXT = """<b> Hola Soy un Bot de Almacenamiento de Archivos Permanentes.
 
 🤖 ᴍɪ ɴᴏᴍʙʀᴇ: {}
 
-📝 ʟᴇɴɢᴜᴀᴊᴇ: <a href=https://www.python.org>𝐏𝐲𝐭𝐡𝐨𝐧𝟑</a>
+📝 ʟᴇɴɢᴜᴀᴊᴇ: <a href=https://www.python.org>Python3</a>
 
-📚 ʙɪʙʟɪᴏᴛᴇᴄᴀ: <a href=https://docs.pyrogram.org>𝐏𝐲𝐫𝐨𝐠𝐫𝐚𝐦</a>
+📚 ʙɪʙʟɪᴏᴛᴇᴄᴀ: <a href=https://docs.pyrogram.org>Pyrogram</a>
 
 🧑🏻‍💻 ᴅᴇsᴀʀʀᴏʟʟᴀᴅᴏʀ: <a href=tg://user?id={}>ᴅᴇsᴀʀʀᴏʟʟᴀᴅᴏʀ</a></b>
 """
@@ -147,12 +147,12 @@ Nᴏᴍʙʀᴇ - {}</b>
     # --- MENSAJE PARA FORZAR SUSCRIPCIÓN ---
     FORCE_MSG = """<b>⚠️ Acceso Restringido ⚠️</b>
 
-Hola {mention} 👋!
-⚠️ Debes ser miembro del CANAL para acceder a estos archivos.
+<b>Hola {mention} 👋!
+Debes ser miembro del CANAL para acceder a estos archivos.
 
 📣 Una vez que te hayas unido, por favor, presiona el botón 'Intentar de Nuevo'.
 
-¡Gracias por tu apoyo! 😊"""
+¡Gracias por tu apoyo! 😊</b>"""
 
     # ... (resto de la clase si hay más) ...
 
