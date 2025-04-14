@@ -273,7 +273,7 @@ async def start(client, message: Message):
                      chat_id = user_id,
                      text=(
                           f"<blockquote><b><u>❗️❗️❗️IMPORTANTE❗️️❗️❗️</u></b>\n\n"
-                          f"Este mensaje será eliminado en <b><u>{AUTO_DELETE // 60} minutos</u> 🫥 <i></b>(Debido a problemas de derechos de autor)</i>.\n\n"
+                          f"Este mensaje será eliminado en <b><u>{AUTO_DELETE} minutos</u> 🫥 <i></b>(Debido a problemas de derechos de autor)</i>.\n\n"
                           f"<b><i>Por favor, reenvía este mensaje a tus mensajes guardados o a cualquier chat privado.</i></b></blockquote>"
                      ),
                      parse_mode=enums.ParseMode.HTML
@@ -352,7 +352,7 @@ async def start(client, message: Message):
                          chat_id = user_id,
                          text=(
                               f"<blockquote><b><u>❗️❗️❗️IMPORTANTE❗️️❗️❗️</u></b>\n\n"
-                              f"Este mensaje será eliminado en <b><u>{AUTO_DELETE // 60} minutos</u> 🫥 <i></b>(Debido a problemas de derechos de autor)</i>.\n\n"
+                              f"Este mensaje será eliminado en <b><u>{AUTO_DELETE} minutos</u> 🫥 <i></b>(Debido a problemas de derechos de autor)</i>.\n\n"
                               f"<b><i>Por favor, reenvía este mensaje a tus mensajes guardados o a cualquier chat privado.</i></b></blockquote>"
                          ),
                          parse_mode=enums.ParseMode.HTML
