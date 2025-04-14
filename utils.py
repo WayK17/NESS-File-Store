@@ -105,7 +105,7 @@ async def check_user_membership(client, user_id, channel_id):
         # Comprobar si el estado es válido
         valid_statuses = [enums.ChatMemberStatus.MEMBER,
                           enums.ChatMemberStatus.ADMINISTRATOR,
-                          enums.ChatMemberStatus.CREATOR]
+                          enums.ChatMemberStatus.OWNER]
         is_valid_status = status_value in valid_statuses
         logger.debug(f"Comprobando si status '{status_value}' está en {valid_statuses}. Resultado: {is_valid_status}") # Log del resultado
 
