@@ -78,53 +78,54 @@ async def check_verification(bot, userid):
         return False
  #--------------------------------------------------------------------------
 
-# ... (el resto de tu código existente en utils.py: get_verify_shorted_link, check_token, etc.) ...
-
 # --- PEGA ESTA NUEVA FUNCIÓN AQUÍ ABAJO ---
 
-# logger debe estar definido (ya lo tienes al principio del archivo)
-# logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
-
 async def check_user_membership(client, user_id, channel_id):
-    """Verifica si un usuario es miembro de un canal específico."""
+    """Verifica si un usuario es miembro de un canal específico (con logging mejorado)."""
     if not channel_id:
         logger.warning("FORCE_SUB_CHANNEL no está configurado. Saltando verificación.")
-        return True # Si no hay canal configurado, se asume que pasa
+        return True
 
-    # Convertir a int si es ID numérico, mantener como string si es @username
     try:
         chat_id_or_username = int(channel_id) if channel_id.lstrip('-').isdigit() else channel_id
     except ValueError:
-         logger.error(f"Valor inválido para FORCE_SUB_CHANNEL: {channel_id}")
-         return True # Failsafe en caso de configuración inválida
+        logger.error(f"Valor inválido para FORCE_SUB_CHANNEL: {channel_id}")
+        return True # Failsafe
 
     try:
+        logger.debug(f"Llamando a get_chat_member para {user_id} en {chat_id_or_username}")
         member = await client.get_chat_member(chat_id=chat_id_or_username, user_id=user_id)
-        # Comprobar si el estado es válido (miembro activo, admin, creador)
-        if member.status in [enums.ChatMemberStatus.MEMBER,
-                             enums.ChatMemberStatus.ADMINISTRATOR,
-                             enums.ChatMemberStatus.CREATOR]:
-            logger.debug(f"Usuario {user_id} ES miembro de {channel_id}.")
+
+        # --- Logging Adicional ---
+        status_value = getattr(member, 'status', 'STATUS_NOT_FOUND') # Obtener status de forma segura
+        status_type = type(status_value).__name__ # Obtener el tipo del status
+        logger.debug(f"Resultado get_chat_member para {user_id}: status={status_value}, type={status_type}")
+        # -------------------------
+
+        # Comprobar si el estado es válido
+        valid_statuses = [enums.ChatMemberStatus.MEMBER,
+                          enums.ChatMemberStatus.ADMINISTRATOR,
+                          enums.ChatMemberStatus.CREATOR]
+        is_valid_status = status_value in valid_statuses
+        logger.debug(f"Comprobando si status '{status_value}' está en {valid_statuses}. Resultado: {is_valid_status}") # Log del resultado
+
+        if is_valid_status:
+            logger.debug(f"Usuario {user_id} ES miembro de {channel_id}. Devolviendo True.") # Log antes de retornar
             return True
         else:
-            # Estados como RESTRICTED, LEFT, KICKED cuentan como no miembro para este propósito
-            logger.debug(f"Usuario {user_id} NO es miembro activo de {channel_id} (status: {member.status}).")
+            logger.debug(f"Usuario {user_id} NO es miembro activo de {channel_id} (status: {status_value}). Devolviendo False.")
             return False
     except UserNotParticipant:
-        # El usuario no está en el canal o nunca ha estado.
-        logger.debug(f"Usuario {user_id} NO es participante de {channel_id} (UserNotParticipant).")
+        logger.debug(f"Usuario {user_id} NO es participante de {channel_id} (UserNotParticipant). Devolviendo False.")
         return False
-    except (ChatAdminRequired, ChatWriteForbidden):
-        # ¡Error crítico de configuración! El bot necesita ser admin.
-        logger.error(f"¡ERROR DE PERMISOS! El bot NO es administrador en el canal ForceSub ({channel_id}). No se puede verificar membresía.")
-        # Failsafe: Dejar pasar si hay error de permisos del bot.
-        return True
+    except (ChatAdminRequired, ChatWriteForbidden) as perm_err:
+        logger.error(f"¡ERROR DE PERMISOS! Bot no admin en {channel_id}. Error: {perm_err}. Devolviendo True (Failsafe).")
+        return True # Failsafe MANTENIDO
     except Exception as e:
-        # Otros errores inesperados (ej. channel_id inválido, error de red)
-        logger.error(f"Error inesperado al verificar membresía de {user_id} en {channel_id}: {e}")
-        # Failsafe: Dejar pasar en caso de error desconocido.
-        return True
+        # Loguear tipo y representación del error, y el traceback completo
+        logger.error(f"Error inesperado al verificar membresía de {user_id} en {channel_id}. Tipo: {type(e)}, Repr: {repr(e)}, Str: {e}", exc_info=True)
+        return True # Failsafe MANTENIDO
+
 
 # --- FIN DE LA NUEVA FUNCIÓN ---
 
