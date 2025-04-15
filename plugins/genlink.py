@@ -6,6 +6,7 @@ import os
 import json
 import base64
 import logging
+from pyrogram.types import Message
 from pyrogram import filters, Client, enums
 from pyrogram.errors import ChannelInvalid, UsernameInvalid, UsernameNotModified
 from config import ADMINS, LOG_CHANNEL, PUBLIC_FILE_STORE, WEBSITE_URL, WEBSITE_URL_MODE
