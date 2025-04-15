@@ -161,9 +161,13 @@ async def start(client, message: Message):
 
     # --- Chequeo de Acceso Premium ---
     is_premium_user = await db.check_premium_status(user_id)
-    logger.debug(f"Usuario {user_id} es premium: {is_premium_user}")
+    # --- NUEVO: Comprobar si es Admin ---
+    is_admin_user = user_id in ADMINS
+    logger.debug(f"Usuario {user_id} es premium: {is_premium_user}, es admin: {is_admin_user}")
 
-    if link_type == "premium" and not is_premium_user:
+    # --- Condición Modificada ---
+    # Denegar SOLO SI: el enlace es premium Y el usuario NO es premium Y TAMPOCO es admin
+    if link_type == "premium" and not is_premium_user and not is_admin_user:
         logger.info(f"Usuario normal {user_id} intentó acceder a enlace premium '{original_payload}'. Denegado.")
         # Enviar mensaje de acceso denegado (Necesita PREMIUM_REQUIRED_MSG en Script.py)
         try:
@@ -171,9 +175,13 @@ async def start(client, message: Message):
                  script.PREMIUM_REQUIRED_MSG.format(mention=message.from_user.mention),
                  quote=True
              )
-        except AttributeError: # Si PREMIUM_REQUIRED_MSG no existe en Script.py
+        except AttributeError: # Fallback si falta el texto en Script.py
              await message.reply_text("❌ Acceso denegado. Este contenido es solo para usuarios Premium.", quote=True)
         return # Detener ejecución
+    else:
+        # Log opcional si un admin accede sin ser premium explícito
+        if link_type == "premium" and is_admin_user and not is_premium_user:
+             logger.info(f"Admin {user_id} accediendo a enlace premium (permitido por ser admin).")
 
     # --- Chequeo de VERIFICACIÓN (Tu lógica original, aplicada ahora) ---
     # (Decide si aplica a todos los enlaces o solo a normales/premium)
