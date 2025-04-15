@@ -23,6 +23,7 @@ from config import ADMINS, BROADCAST_DELETE_DELAY
 logger = logging.getLogger(__name__)
 # logger.setLevel(logging.INFO) # O el nivel que prefieras
 
+
 # ==============================================================
 # ============ CÓDIGO ORIGINAL PARA /broadcast =================
 # ==============================================================
@@ -55,9 +56,10 @@ async def broadcast_messages(user_id, message):
         logger.error(f"Error desconocido en broadcast_messages para {user_id}: {e}")
         return False, "Error"
 
-# --- Tu manejador original para /broadcast (sin cambios) ---
+# --- Tu manejador original para /broadcast (requiere responder) ---
 @Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
 async def verupikkals(bot, message): # Nombre original mantenido
+    # Esta función ahora solo se ejecuta si se responde a un mensaje
     users = await db.get_all_users()
     b_msg = message.reply_to_message
     sts = await message.reply_text(text='**Iniciando broadcast estándar...**') # Mensaje ligeramente cambiado
@@ -68,14 +70,17 @@ async def verupikkals(bot, message): # Nombre original mantenido
     deleted = 0
     failed = 0
     success = 0
-    update_interval = max(10, total_users // 20) # Intervalo para actualizar estado
+    # Calcular intervalo para actualizar estado (más robusto)
+    try:
+        update_interval = max(10, total_users // 20) if total_users > 0 else 10
+    except ZeroDivisionError:
+         update_interval = 10 # Fallback si total_users es 0
 
     async for user in users:
         # Añadido chequeo más robusto para obtener user_id
         user_id = user.get('id')
         if not user_id:
              logger.warning(f"Documento de usuario sin ID encontrado durante broadcast: {user}")
-             # ¿Contar como fallo o simplemente saltar? Contaremos como fallo por ahora.
              failed += 1
              done += 1
              continue # Saltar este documento
@@ -123,9 +128,9 @@ async def verupikkals(bot, message): # Nombre original mantenido
                 logger.warning(f"No se pudo editar el mensaje de estado de /broadcast: {edit_err}")
                 pass # Continuar aunque falle la edición
 
-        # Pausa corta
-        if done % 5 == 0:
-            await asyncio.sleep(0.1)
+        # Pausa corta para evitar sobrecargar
+        if done % 5 == 0: # Pausa cada 5 envíos
+            await asyncio.sleep(0.1) # Pausa de 100ms
 
 
     # Resumen final
@@ -144,11 +149,31 @@ async def verupikkals(bot, message): # Nombre original mantenido
         await sts.edit(final_text)
     except Exception as final_edit_err:
          logger.warning(f"No se pudo editar el resumen final de /broadcast: {final_edit_err}")
-         await message.reply_text(final_text, quote=True) # Enviar como nuevo mensaje si falla edición
+         # Enviar como nuevo mensaje si falla la edición
+         await message.reply_text(final_text, quote=True)
+
+# ==============================================================
+# ===== NUEVO MANEJADOR PARA MOSTRAR AYUDA DE /broadcast ======
+# ==============================================================
+
+@Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.private & ~filters.reply)
+async def broadcast_help_handler(bot, message):
+    """Muestra la ayuda si /broadcast se usa sin responder a un mensaje."""
+    broadcast_help_text = """
+    <blockquote>ℹ️ <b>Cómo usar /broadcast:</b></blockquote>
+
+    Reenvía el mensaje respondido a todos los usuarios registrados.
+
+    <b>Formato:</b>
+    1. Responde a un mensaje con <code>/broadcast</code>.
+
+    <i>(Para enviar texto directamente, considera usar otro comando o modificar este).</i>
+    """
+    await message.reply_text(broadcast_help_text, disable_web_page_preview=True, quote=True)
 
 
 # ==============================================================
-# =========== CÓDIGO NUEVO AÑADIDO PARA /dbroadcast ===========
+# =========== CÓDIGO EXISTENTE PARA /dbroadcast ================
 # ==============================================================
 
 # --- Función auxiliar nueva para borrar mensajes después de un retraso ---
@@ -169,12 +194,21 @@ async def delete_message_after_delay(client, chat_id, message_id, delay):
 async def delete_broadcast_handler(client, message):
     # Verificar que el comando responde a un mensaje
     if not message.reply_to_message:
-        await message.reply_text("❗️ Por favor, responde al mensaje que quieres transmitir con `/dbroadcast`.")
+        # --- Añadido: Ayuda para /dbroadcast ---
+        dbroadcast_help_text = """
+        <blockquote>ℹ️ <b>Cómo usar /dbroadcast:</b></blockquote>
+
+        Reenvía el mensaje respondido a todos los usuarios y lo borra automáticamente después de un tiempo (configurable).
+
+        <b>Formato:</b>
+        1. Responde a un mensaje con <code>/dbroadcast</code>.
+        """
+        await message.reply_text(dbroadcast_help_text, quote=True, disable_web_page_preview=True)
         return
 
     replied_message = message.reply_to_message
     total_users = await db.total_users_count()
-    users_cursor = await db.get_all_users() # ¡AQUÍ ESTÁ EL CAMBIO!
+    users_cursor = await db.get_all_users() # Obtener como cursor/generador
 
     # Mensaje inicial al admin
     broadcast_info_text = (
@@ -189,7 +223,10 @@ async def delete_broadcast_handler(client, message):
     processed_count = 0
     start_time_db = time.time() # Tiempo para dbroadcast
     # Actualizar estado cada X usuarios (similar al broadcast normal)
-    update_interval_db = max(10, total_users // 20)
+    try:
+        update_interval_db = max(10, total_users // 20) if total_users > 0 else 10
+    except ZeroDivisionError:
+         update_interval_db = 10 # Fallback si total_users es 0
 
     async for user in users_cursor:
         user_id = user.get('id') # Asume que el documento de usuario tiene un campo 'id'
@@ -231,7 +268,8 @@ async def delete_broadcast_handler(client, message):
                 failed_count += 1
 
         except (UserIsBlocked, PeerIdInvalid, InputUserDeactivated) as user_err: # Agrupamos errores de usuario
-            logger.warning(f"Fallo al enviar dbroadcast a {user_id_int}: {user_err}. Usuario bloqueó, ID inválido o desactivado.")
+            # Log más informativo
+            logger.warning(f"Fallo al enviar dbroadcast a {user_id_int} ({type(user_err).__name__}). El usuario puede haber bloqueado, estar desactivado o tener un ID inválido.")
             failed_count += 1
             # Considera si quieres borrar al usuario aquí también como en broadcast_messages
             # await db.delete_user(user_id_int)
@@ -269,7 +307,7 @@ async def delete_broadcast_handler(client, message):
         f"⏱️ Tiempo total: {time_taken_db}\n\n"
         f"✅ Éxito: {success_count}\n"
         f"❌ Fallo: {failed_count}\n"
-        f"👤 Total Usuarios: {processed_count}"
+        f"👤 Total Usuarios Procesados: {processed_count}" # Cambiado para mayor claridad
     )
     try:
         # Evitar editar si el mensaje fue eliminado mientras tanto
