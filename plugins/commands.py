@@ -301,13 +301,158 @@ async def start(client, message: Message):
         return
 
 # --- Tus comandos /api, /base_site, /stats y cb_handler (SIN CAMBIOS) ---
+
 @Client.on_message(filters.command('api') & filters.private)
-# ... (código api sin cambios) ...
-async def shortener_api_handler(client, m: Message): user_id = m.from_user.id; user = await get_user(user_id); cmd = m.command; if len(cmd) == 1: s = script.SHORTENER_API_MESSAGE.format(base_site=user.get("base_site", "N/A"), shortener_api=user.get("shortener_api", "N/A")); return await m.reply(s); elif len(cmd) == 2: api = cmd[1].strip(); await update_user_info(user_id, {"shortener_api": api}); await m.reply("<b>Shortener API updated successfully to</b> " + api); else: await m.reply("Formato: /api TU_API_KEY")
+async def shortener_api_handler(client, m: Message):
+    user_id = m.from_user.id
+    try:
+        # Obtener info del usuario (manejando si no existe o falta data)
+        user = await get_user(user_id) # Asume que get_user es de plugins.users_api
+        if not user:
+            logger.warning(f"Datos de usuario no encontrados para {user_id} en shortener_api_handler")
+            user_base_site = "N/Configurado"
+            user_shortener_api = "N/Configurada"
+        else:
+            user_base_site = user.get("base_site", "N/Configurado")
+            user_shortener_api = user.get("shortener_api", "N/Configurada")
+
+    except Exception as e:
+        logger.error(f"Error obteniendo datos de usuario {user_id} en shortener_api_handler: {e}")
+        await m.reply_text("❌ Ocurrió un error al obtener tu configuración de API.")
+        return
+
+    cmd = m.command
+
+    if len(cmd) == 1:
+        # Mostrar información actual
+        # Asume que SHORTENER_API_MESSAGE existe en Script.py
+        try:
+            s = script.SHORTENER_API_MESSAGE.format(
+                base_site=user_base_site,
+                shortener_api=user_shortener_api
+            )
+            await m.reply_text(s) # Usar reply_text
+        except AttributeError:
+             logger.error("Falta 'script.SHORTENER_API_MESSAGE'")
+             await m.reply_text("Error: Texto de mensaje no encontrado.")
+        except Exception as fmt_err:
+             logger.error(f"Error formateando SHORTENER_API_MESSAGE: {fmt_err}")
+             await m.reply_text("Error mostrando la información de la API.")
+
+
+    elif len(cmd) == 2:
+        # Actualizar API
+        api_key = cmd[1].strip()
+
+        # --- Manejo para eliminar la API ---
+        if api_key.lower() == "none":
+            logger.info(f"Usuario {user_id} eliminando Shortener API.")
+            try:
+                # Asume que update_user_info es de plugins.users_api
+                await update_user_info(user_id, {"shortener_api": None})
+                await m.reply_text("<b>✅ API del Acortador eliminada correctamente.</b>")
+            except Exception as e:
+                 logger.error(f"Error eliminando shortener_api para {user_id}: {e}")
+                 await m.reply_text("❌ Ocurrió un error al eliminar tu API.")
+            return # Terminar después de eliminar
+
+        # --- Establecer nueva API (si no es 'none') ---
+        if not api_key: # Chequear si envió /api ""
+             await m.reply_text("❌ No puedes establecer una API vacía. Usa `/api None` para eliminarla.")
+             return
+
+        logger.info(f"Usuario {user_id} actualizando Shortener API a: {api_key[:5]}...") # Loguear solo parte de la API
+        try:
+            # Asume que update_user_info es de plugins.users_api
+            await update_user_info(user_id, {"shortener_api": api_key})
+            await m.reply_text(f"<b>✅ API del Acortador actualizada correctamente.</b>") # Mensaje genérico por seguridad
+        except Exception as e:
+             logger.error(f"Error actualizando shortener_api para {user_id}: {e}")
+             await m.reply_text("❌ Ocurrió un error al actualizar tu API.")
+    else:
+        # Comando inválido (más de 2 partes)
+        await m.reply_text(
+            "Formato incorrecto. Uso:\n"
+            "`/api` (para ver tu API actual)\n"
+            "`/api TU_NUEVA_API_KEY` (para establecerla)\n"
+            "`/api None` (para eliminarla)"
+        )
+
 
 @Client.on_message(filters.command("base_site") & filters.private)
-# ... (código base_site sin cambios) ...
-async def base_site_handler(client, m: Message): user_id = m.from_user.id; user = await get_user(user_id); cmd = m.command; current_site = user.get("base_site", "None"); text = (f"`/base_site (base_site)`\n\n**Current base site:** {current_site}\n\n**Ejemplo:** `/base_site tudominio.com`\n\nPara eliminar: `/base_site None`"); if len(cmd) == 1: return await m.reply(text=text, disable_web_page_preview=True); elif len(cmd) == 2: base_site = cmd[1].strip().lower(); if base_site == "none": await update_user_info(user_id, {"base_site": None}); return await m.reply("<b>✅ Base Site eliminado correctamente</b>"); if not domain(base_site): return await m.reply(text=text + "\n\n❌ Dominio inválido", disable_web_page_preview=True); await update_user_info(user_id, {"base_site": base_site}); await m.reply("<b>✅ Base Site actualizado correctamente</b>"); else: await m.reply("Formato: /base_site tudominio.com | /base_site None")
+async def base_site_handler(client, m: Message):
+    user_id = m.from_user.id
+    try:
+        # Obtener info del usuario
+        user = await get_user(user_id) # Asume de plugins.users_api
+        if not user:
+             logger.warning(f"Datos de usuario no encontrados para {user_id} en base_site_handler")
+             current_site = "N/A (Usuario no encontrado)"
+        else:
+             current_site = user.get("base_site", "Ninguno") # Default a "Ninguno"
+
+    except Exception as e:
+        logger.error(f"Error obteniendo datos de usuario {user_id} en base_site_handler: {e}")
+        await m.reply_text("❌ Ocurrió un error al obtener tu configuración de Sitio Base.")
+        return
+
+    cmd = m.command
+
+    # Mensaje de ayuda/estado
+    help_text = (
+         f"⚙️ **Configuración del Sitio Base del Acortador**\n\n"
+         f"Usa este comando para establecer el dominio principal (sin https://).\n\n"
+         f"Sitio Base Actual: `{current_site}`\n\n"
+         f"➡️ Para cambiarlo: `/base_site tudominio.com`\n"
+         f"➡️ Para eliminarlo: `/base_site None`"
+    )
+
+    if len(cmd) == 1:
+        # Mostrar estado actual y ayuda
+        await m.reply_text(text=help_text, disable_web_page_preview=True)
+
+    elif len(cmd) == 2:
+        # Actualizar o eliminar Sitio Base
+        base_site_input = cmd[1].strip().lower()
+
+        if base_site_input == "none":
+            # Eliminar
+            logger.info(f"Usuario {user_id} eliminando base_site.")
+            try:
+                await update_user_info(user_id, {"base_site": None}) # Asume de plugins.users_api
+                await m.reply_text("<b>✅ Sitio Base eliminado correctamente.</b>")
+            except Exception as e:
+                logger.error(f"Error eliminando base_site para {user_id}: {e}")
+                await m.reply_text("❌ Ocurrió un error al eliminar el Sitio Base.")
+        else:
+            # Establecer nuevo Sitio Base
+            # Validar dominio usando librería 'validators'
+            try:
+                is_valid_domain = domain(base_site_input)
+            except Exception as val_err:
+                 # La librería validators puede lanzar errores si la entrada es muy rara
+                 logger.error(f"Error validando dominio '{base_site_input}': {val_err}")
+                 is_valid_domain = False # Asumir inválido si la validación falla
+
+            if not is_valid_domain:
+                logger.warning(f"Intento de configurar base_site inválido por {user_id}: {base_site_input}")
+                await m.reply_text(text=help_text + "\n\n❌ **El dominio ingresado no parece válido.**", disable_web_page_preview=True)
+                return
+
+            # Actualizar en DB
+            logger.info(f"Usuario {user_id} actualizando base_site a: {base_site_input}")
+            try:
+                await update_user_info(user_id, {"base_site": base_site_input}) # Asume de plugins.users_api
+                await m.reply_text(f"<b>✅ Sitio Base actualizado correctamente a:</b> `{base_site_input}`")
+            except Exception as e:
+                 logger.error(f"Error actualizando base_site para {user_id}: {e}")
+                 await m.reply_text("❌ Ocurrió un error al actualizar el Sitio Base.")
+    else:
+        # Comando inválido (más de 2 partes)
+         await m.reply_text("Formato incorrecto.\n" + help_text, disable_web_page_preview=True)
+
+
+
 
 @Client.on_message(filters.command("stats") & filters.private)
 # ... (código stats sin cambios) ...
