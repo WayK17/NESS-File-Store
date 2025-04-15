@@ -1,6 +1,5 @@
 # plugins/genlink.py
 
-# ... (Imports sin cambios: re, os, json, base64, logging, pyrogram, config, users_api, etc.) ...
 import re
 import os
 import json
@@ -23,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 # --- Función allowed (sin cambios) ---
 async def allowed(_, __, message):
-    # ... (tu lógica actual, permitiendo admins o todos si PUBLIC_FILE_STORE=True) ...
+    # Permite admins o todos si PUBLIC_FILE_STORE=True
     if PUBLIC_FILE_STORE: return True
     if message.from_user and message.from_user.id in ADMINS: return True
     return False
@@ -160,7 +159,6 @@ async def gen_link_batch(bot: Client, message: Message):
     cmd, first, last = links
 
     # --- Validación de links y obtención de IDs (sin cambios) ---
-    # ... (tu código original para validar regex, obtener chat_id, msg_ids) ...
     regex = re.compile("(https://)?(t\.me/|telegram\.me/|telegram\.dog/)(c/)?(\d+|[a-zA-Z_0-9]+)/(\d+)$")
     match = regex.match(first);
     if not match: return await message.reply('❌ Enlace inicial inválido')
@@ -176,14 +174,14 @@ async def gen_link_batch(bot: Client, message: Message):
         chat = await bot.get_chat(chat_id_int); chat_id = chat.id
     except Exception as e: logger.error(f"Error get_chat batch: {e}"); return await message.reply(f'❌ Error: {e}')
 
-    # --- Iterar mensajes y crear JSON (sin cambios funcionales) ---
+    # --- Iterar mensajes y crear JSON ---
     sts = await message.reply("⏳ **Generando lote...**")
-    # ... (tu código original para iterar, crear outlist, FRMT) ...
     outlist = []; og_msg = 0; tot = 0; failed_msgs = 0
     start_id = min(f_msg_id, l_msg_id); end_id = max(f_msg_id, l_msg_id); total_estimate = end_id - start_id + 1
     FRMT = "**Generando...** {current}/{total} ({percent}%)"
     try:
-        async for msg in bot.iter_messages(chat_id, end_id + 1, start_id):
+        # --- LÍNEA CORREGIDA ---
+        async for msg in bot.iter_messages(chat_id, end_id, start_id):
             tot += 1
             if tot % 25 == 0:
                  try: await sts.edit(FRMT.format(current=tot, total=total_estimate, percent=round((tot/total_estimate)*100)))
@@ -247,6 +245,7 @@ async def gen_link_batch(bot: Client, message: Message):
     prefix_normal = "🖇️ Corto (Normal)" if shortened_normal else "🔗 Original (Normal)"
     prefix_premium = "💎 Corto (Premium)" if shortened_premium else "✨ Original (Premium)"
 
+    # Se usa og_msg para el conteo que se muestra al usuario, que debería ser correcto ahora.
     reply_text = (
         f"<b>✅ Enlaces de Lote Generados:</b>\n\n"
         f"Contiene `{og_msg}` archivos." + (f" ({failed_msgs} errores al leer)" if failed_msgs else "") + "\n\n"
