@@ -197,42 +197,47 @@ async def start(client: Client, message: Message):
         return
 
     # Lógica para BATCH
-    elif is_batch:
-        batch_json_msg_id = original_payload_id
-        logger.info(f"Procesando BATCH. ID JSON: {batch_json_msg_id}")
-        sts = await message.reply_text("⏳ **Procesando lote...**", quote=True)
-        msgs = BATCH_FILES.get(batch_json_msg_id)
-        # Cargar JSON si no está en caché
-if not msgs:
-    file_path = None
-    try:
-        log_channel_int = int(LOG_CHANNEL) if str(LOG_CHANNEL).lstrip('-').isdigit() else LOG_CHANNEL
-        logger.debug(f"Descargando JSON BATCH msg {batch_json_msg_id} de {log_channel_int}")
-        batch_list_msg = await client.get_messages(log_channel_int, int(batch_json_msg_id))
-        assert batch_list_msg and batch_list_msg.document
-        file_path = await client.download_media(batch_list_msg.document.file_id, file_name=f"./batch_{batch_json_msg_id}.json")
-        with open(file_path, 'r', encoding='utf-8') as fd:
-            msgs = json.load(fd)
-        BATCH_FILES[batch_json_msg_id] = msgs
-        logger.info(f"BATCH {batch_json_msg_id} cargado ({len(msgs)} items).")
-    except FileNotFoundError as e:
-        logger.error(f"Error BATCH: {e}")
-        return await sts.edit_text(f"❌ Error: Info lote ({batch_json_msg_id}) no encontrada.")
-    except json.JSONDecodeError as e:
-        logger.error(f"Error BATCH: JSON inválido ({batch_json_msg_id}): {e}")
-        return await sts.edit_text("❌ Error: Info lote corrupta.")
-    except Exception as batch_load_err:
-        logger.error(f"Error cargando BATCH {batch_json_msg_id}: {batch_load_err}", exc_info=True)
-        return await sts.edit_text("❌ Error cargando info lote.")
-    finally:
-        if file_path and os.path.exists(file_path):
-            try:
-                os.remove(file_path)
-                logger.debug(f"JSON temp {file_path} eliminado.")
-            except OSError as e:
-                logger.error(f"Error eliminando JSON {file_path}: {e}")
-    if not msgs or not isinstance(msgs, list):
-        return await sts.edit_text("❌ Error: Info lote vacía/inválida.")
+elif is_batch:
+    batch_json_msg_id = original_payload_id
+    logger.info(f"Procesando BATCH. ID JSON: {batch_json_msg_id}")
+    sts = await message.reply_text("⏳ **Procesando lote...**", quote=True)
+    msgs = BATCH_FILES.get(batch_json_msg_id)
+    # Cargar JSON si no está en caché
+    if not msgs:
+         file_path = None
+         # --- SECCIÓN CORREGIDA ---
+         try:
+             # Intenta convertir LOG_CHANNEL a entero si es numérico (incluyendo negativos)
+             log_channel_int = int(LOG_CHANNEL) if str(LOG_CHANNEL).lstrip('-').isdigit() else LOG_CHANNEL
+
+             logger.debug(f"Descargando JSON BATCH msg {batch_json_msg_id} de {log_channel_int}")
+
+             # Obtiene el mensaje que contiene el archivo JSON
+             batch_list_msg = await client.get_messages(log_channel_int, int(batch_json_msg_id))
+
+             # Asegura que el mensaje existe y tiene un documento
+             assert batch_list_msg and batch_list_msg.document
+
+             # Descarga el archivo JSON
+             file_path = await client.download_media(
+                 batch_list_msg.document.file_id,
+                 file_name=f"./batch_{batch_json_msg_id}.json"
+             )
+
+             # Abre y lee el archivo JSON
+             with open(file_path, 'r', encoding='utf-8') as fd:
+                 msgs = json.load(fd)
+
+             # Almacena los mensajes cargados
+             BATCH_FILES[batch_json_msg_id] = msgs
+             logger.info(f"BATCH {batch_json_msg_id} cargado ({len(msgs)} items).")
+         # --- FIN SECCIÓN CORREGIDA ---
+         except FileNotFoundError as e: logger.error(f"Error BATCH: {e}"); return await sts.edit_text(f"❌ Error: Info lote ({batch_json_msg_id}) no encontrada.")
+         except json.JSONDecodeError as e: logger.error(f"Error BATCH: JSON inválido ({batch_json_msg_id}): {e}"); return await sts.edit_text("❌ Error: Info lote corrupta.")
+         except Exception as batch_load_err: logger.error(f"Error cargando BATCH {batch_json_msg_id}: {batch_load_err}", exc_info=True); return await sts.edit_text("❌ Error cargando info lote.")
+         finally:
+              if file_path and os.path.exists(file_path): try: os.remove(file_path); logger.debug(f"JSON temp {file_path} eliminado."); except OSError as e: logger.error(f"Error eliminando JSON {file_path}: {e}")
+    if not msgs or not isinstance(msgs, list): return await sts.edit_text("❌ Error: Info lote vacía/inválida.")
 
         # Bucle de envío BATCH con caption restaurado
         filesarr = []; total_msgs = len(msgs); logger.info(f"Enviando {total_msgs} mensajes BATCH {batch_json_msg_id} a {user_id}")
