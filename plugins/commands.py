@@ -203,7 +203,7 @@ async def start(client: Client, message: Message):
         sts = await message.reply_text("⏳ **Procesando lote...**", quote=True)
         msgs = BATCH_FILES.get(batch_json_msg_id)
         # Cargar JSON si no está en caché
-        if not msgs:
+if not msgs:
     file_path = None
     try:
         log_channel_int = int(LOG_CHANNEL) if str(LOG_CHANNEL).lstrip('-').isdigit() else LOG_CHANNEL
@@ -231,7 +231,8 @@ async def start(client: Client, message: Message):
                 logger.debug(f"JSON temp {file_path} eliminado.")
             except OSError as e:
                 logger.error(f"Error eliminando JSON {file_path}: {e}")
-        if not msgs or not isinstance(msgs, list): return await sts.edit_text("❌ Error: Info lote vacía/inválida.")
+    if not msgs or not isinstance(msgs, list):
+        return await sts.edit_text("❌ Error: Info lote vacía/inválida.")
 
         # Bucle de envío BATCH con caption restaurado
         filesarr = []; total_msgs = len(msgs); logger.info(f"Enviando {total_msgs} mensajes BATCH {batch_json_msg_id} a {user_id}")
