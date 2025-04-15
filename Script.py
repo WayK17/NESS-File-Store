@@ -154,8 +154,16 @@ Debes ser miembro del CANAL para acceder a estos archivos.
 
 ¡Gracias por tu apoyo! 😊</b>"""
 
-    # ... (resto de la clase si hay más) ...
 
+    PREMIUM_REQUIRED_MSG = """<b>⚠️ Acceso Restringido ⚠️</b>
+
+Lo sentimos {mention}, este enlace es exclusivo para usuarios **Premium**. ✨
+
+Si deseas acceder a este y otro contenido exclusivo, considera obtener una membresía Premium.
+
+(Aquí podrías añadir información sobre cómo hacerse premium, si tienes un sistema)"""
+
+    # ... (resto de la clase) ...
 
 
 # No Eliminar Crédito Tg - @VJ_Botz
