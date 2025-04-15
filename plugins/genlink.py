@@ -13,12 +13,18 @@ from config import ADMINS, LOG_CHANNEL, PUBLIC_FILE_STORE, WEBSITE_URL, WEBSITE_
 try:
     from plugins.users_api import get_user, get_short_link
 except ImportError:
+    # Crear un logger básico si no se ha configurado antes
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
     logger.error("No se pudo importar desde plugins.users_api. La función de acortador fallará.")
     # Definir funciones dummy si falla la importación
     async def get_user(user_id): return {} # Devuelve dict vacío
     async def get_short_link(user, link): return None # Devuelve None
 
-logger = logging.getLogger(__name__)
+# Asegurarse de que el logger esté definido
+if 'logger' not in locals():
+     logging.basicConfig(level=logging.INFO)
+     logger = logging.getLogger(__name__)
 
 # --- Función allowed (sin cambios) ---
 async def allowed(_, __, message):
@@ -151,11 +157,42 @@ async def gen_link_batch(bot: Client, message: Message):
     user_id = message.from_user.id
     logger.info(f"Generando enlaces BATCH Normal/Premium con /batch para {user_id}")
 
-    # --- Validar formato (ahora solo comando + link1 + link2) ---
-    links = message.text.strip().split(" ")
-    if len(links) != 3:
-        return await message.reply("⚠️ Formato incorrecto.\nUso: `/batch <link_mensaje_inicial> <link_mensaje_final>`")
+    # --- Bloque de Ayuda Añadido ---
+    # Define el texto de ayuda (puedes modificar el formato y contenido a tu gusto)
+    batch_help_text = """
+**ℹ️ Cómo usar /batch:**
 
+Genera enlaces de lote para un rango de mensajes.
+
+**Formato:**
+`/batch [Enlace_Msg_Inicial] [Enlace_Msg_Final]`
+
+**Ejemplo:**
+`/batch https://t.me/c/123456/10 https://t.me/c/123456/25`
+
+*Asegúrate de que los enlaces sean del mismo chat y el bot sea miembro.*
+"""
+
+    # Comprueba si se proporcionaron los argumentos correctos
+    links = message.text.strip().split(" ")
+
+    # Si no hay suficientes argumentos (< 3: /batch + link1 + link2)
+    if len(links) < 3:
+        return await message.reply_text(
+            batch_help_text,
+            quote=True,
+            disable_web_page_preview=True
+        )
+    # Si hay demasiados argumentos (> 3)
+    elif len(links) > 3:
+         return await message.reply_text(
+            f"❌ Demasiados argumentos.\n\n{batch_help_text}",
+            quote=True,
+            disable_web_page_preview=True
+        )
+    # --- Fin Bloque de Ayuda ---
+
+    # Extraer los enlaces si el número de argumentos es correcto (3)
     cmd, first, last = links
 
     # --- Validación de links y obtención de IDs (sin cambios) ---
@@ -170,9 +207,10 @@ async def gen_link_batch(bot: Client, message: Message):
     if l_chat_id.isnumeric(): l_chat_id = int(("-100" + l_chat_id))
     if f_chat_id != l_chat_id: return await message.reply("❌ Los enlaces deben ser del mismo chat.")
     try:
+        # Intenta obtener el chat_id numérico si es posible
         chat_id_int = int(f_chat_id) if isinstance(f_chat_id, str) and f_chat_id.lstrip('-').isdigit() else f_chat_id
         chat = await bot.get_chat(chat_id_int); chat_id = chat.id
-    except Exception as e: logger.error(f"Error get_chat batch: {e}"); return await message.reply(f'❌ Error: {e}')
+    except Exception as e: logger.error(f"Error get_chat batch: {e}"); return await message.reply(f'❌ Error al obtener información del chat: {e}')
 
     # --- Iterar mensajes y crear JSON ---
     sts = await message.reply("⏳ **Generando lote...**")
@@ -180,31 +218,53 @@ async def gen_link_batch(bot: Client, message: Message):
     start_id = min(f_msg_id, l_msg_id); end_id = max(f_msg_id, l_msg_id); total_estimate = end_id - start_id + 1
     FRMT = "**Generando...** {current}/{total} ({percent}%)"
     try:
-        # --- LÍNEA CORREGIDA ---
-        async for msg in bot.iter_messages(chat_id, end_id, start_id):
+        # --- LÍNEA YA CORREGIDA EN RESPUESTA ANTERIOR ---
+        async for msg in bot.iter_messages(chat_id, end_id, start_id): # Usando end_id (no end_id + 1)
             tot += 1
             if tot % 25 == 0:
                  try: await sts.edit(FRMT.format(current=tot, total=total_estimate, percent=round((tot/total_estimate)*100)))
-                 except: pass
+                 except: pass # Ignorar errores al editar (ej. MessageNotModified)
             if msg.empty or msg.service: continue
-            file = { "channel_id": str(chat_id), "msg_id": msg.id }; og_msg += 1; outlist.append(file)
-    except Exception as iter_err: logger.error(f"Error iter_messages batch {chat_id}: {iter_err}"); failed_msgs = total_estimate - og_msg
+            # Añadir información necesaria al JSON
+            file = { "channel_id": str(chat_id), "msg_id": msg.id }
+            og_msg += 1
+            outlist.append(file)
+    except Exception as iter_err:
+        logger.error(f"Error iter_messages batch {chat_id} desde {start_id} hasta {end_id}: {iter_err}", exc_info=True)
+        failed_msgs = total_estimate - og_msg # Estimar fallos si la iteración se interrumpe
+        # Informar al usuario del error de iteración
+        await sts.edit(f"❌ Error al leer mensajes del chat: {iter_err}")
+        # Podríamos decidir devolver aquí o continuar con los mensajes que sí se leyeron (si outlist no está vacío)
+        if not outlist: return # Si no se leyó ningún mensaje, no continuar
 
-    if not outlist: return await sts.edit("❌ No se encontraron mensajes válidos.")
-    logger.info(f"Lote generado para {user_id}. {og_msg} mensajes.")
+    if not outlist: return await sts.edit("❌ No se encontraron mensajes válidos en el rango especificado.")
+    logger.info(f"Lote generado para {user_id}. {og_msg} mensajes encontrados.") # Usar og_msg que cuenta los mensajes realmente añadidos
 
     # --- Guardar JSON, enviar a LOG_CHANNEL (sin cambios) ---
-    json_file_path = f"batch_{user_id}.json"
+    json_file_path = f"batch_{user_id}_{start_id}_{end_id}.json" # Nombre de archivo más descriptivo
     json_msg_id = None # Inicializar
     try:
         with open(json_file_path, "w+") as out: json.dump(outlist, out)
-        post = await bot.send_document(LOG_CHANNEL, json_file_path, file_name="BatchInfo.json", caption=f"Batch generado por {user_id}")
-        json_msg_id = str(post.id)
-    except Exception as send_err: logger.error(f"Error enviando JSON batch a LOG_CHANNEL: {send_err}"); return await sts.edit("❌ Error guardando info del lote.")
+        # Enviar el documento a LOG_CHANNEL
+        post = await bot.send_document(
+            LOG_CHANNEL,
+            json_file_path,
+            file_name=f"BatchInfo_{chat_id}_{start_id}-{end_id}.json", # Nombre más descriptivo
+            caption=f"Batch generado por {user_mention} ({user_id}). Rango: {start_id}-{end_id}. {og_msg} archivos." # Caption más informativo
+        )
+        json_msg_id = str(post.id) # Guardar el ID del mensaje que contiene el JSON
+    except Exception as send_err:
+        logger.error(f"Error enviando JSON batch a LOG_CHANNEL: {send_err}", exc_info=True)
+        return await sts.edit("❌ Error interno al guardar la información del lote.")
     finally:
-        if os.path.exists(json_file_path): os.remove(json_file_path)
+        # Asegurarse de borrar el archivo JSON local
+        if os.path.exists(json_file_path):
+            try:
+                os.remove(json_file_path)
+            except OSError as rm_err:
+                 logger.error(f"No se pudo eliminar el archivo JSON temporal {json_file_path}: {rm_err}")
 
-    if not json_msg_id: return await sts.edit("❌ Error obteniendo ID de la info del lote.") # Salir si falló el envío a LOG_CHANNEL
+    if not json_msg_id: return await sts.edit("❌ Error crítico: No se pudo obtener el ID de la información del lote.") # Salir si falló el envío a LOG_CHANNEL
 
     # --- Crear payloads (Normal y Premium) usando el ID del JSON ---
     payload_normal_str = f"normal:{json_msg_id}"
@@ -215,12 +275,16 @@ async def gen_link_batch(bot: Client, message: Message):
     payload_premium_enc = base64.urlsafe_b64encode(payload_premium_str.encode("ascii")).decode("ascii").rstrip("=")
 
     # --- Construir ambos enlaces finales (con prefijo BATCH-) ---
-    bot_username = (await bot.get_me()).username
+    try:
+        bot_username = (await bot.get_me()).username
+    except Exception as me_err:
+        logger.error(f"No se pudo obtener el username del bot: {me_err}")
+        return await sts.edit("❌ Error interno al generar los enlaces finales.")
+
     link_normal_orig = f"https://t.me/{bot_username}?start=BATCH-{payload_normal_enc}"
     link_premium_orig = f"https://t.me/{bot_username}?start=BATCH-{payload_premium_enc}"
 
     # --- Generar y acortar ambos enlaces ---
-    # (Usamos una versión simplificada aquí, asumiendo que generate_and_shorten_link podría modificarse o usarse directo)
     final_link_normal = link_normal_orig
     final_link_premium = link_premium_orig
     shortened_normal = False
@@ -245,14 +309,20 @@ async def gen_link_batch(bot: Client, message: Message):
     prefix_normal = "🖇️ Corto (Normal)" if shortened_normal else "🔗 Original (Normal)"
     prefix_premium = "💎 Corto (Premium)" if shortened_premium else "✨ Original (Premium)"
 
-    # Se usa og_msg para el conteo que se muestra al usuario, que debería ser correcto ahora.
+    # Usar og_msg (mensajes realmente encontrados y añadidos) para el conteo final.
     reply_text = (
         f"<b>✅ Enlaces de Lote Generados:</b>\n\n"
-        f"Contiene `{og_msg}` archivos." + (f" ({failed_msgs} errores al leer)" if failed_msgs else "") + "\n\n"
+        f"Contiene `{og_msg}` archivos." + (f" ({failed_msgs} errores al leer)" if failed_msgs > 0 else "") + "\n\n" # Mostrar errores si hubo
         f"{prefix_normal} :\n`{final_link_normal}`\n\n"
         f"{prefix_premium} :\n`{final_link_premium}`"
     )
-    await sts.edit(reply_text)
+    try:
+        await sts.edit(reply_text)
+    except Exception as final_edit_err:
+         logger.warning(f"No se pudo editar el mensaje final de /batch: {final_edit_err}")
+         # Si falla la edición, enviar como nuevo mensaje
+         await message.reply_text(reply_text, quote=True)
+
 
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
