@@ -489,4 +489,4 @@ async def del_premium_command(client, message: Message):
         else: await message.reply_text(f"❌ Error desactivando premium {target_user_id}.")
     except Exception as e: logger.error(f"Error remove_premium {target_user_id}: {e}"); await message.reply_text("❌ Error interno.")
 
-No modifiques nada, solo añade la función que envíe el caption que se eliminó, pero no modifiques lo que ya esta, solo añadele, y también los comandos premium añadele con un texto para que el usuario sepa como usarlo.
+# No modifiques nada, solo añade la función que envíe el caption que se eliminó, pero no modifiques lo que ya esta, solo añadele, y también los comandos premium añadele con un texto para que el usuario sepa como usarlo.
