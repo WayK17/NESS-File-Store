@@ -131,9 +131,9 @@ async def start(client: Client, message: Message):
             [InlineKeyboardButton('Únete a Nuestro Canal', url='https://t.me/NessCloud')],
             [InlineKeyboardButton('⚠️ Grupo de Soporte', url='https://t.me/NESS_Soporte')]
         ]
-        # Añadir botón de clonar si no está en modo clon
-        if not CLONE_MODE:
-            buttons_list.append([InlineKeyboardButton('🤖 Clonar Bot', callback_data='clone')])
+        # --- Botón Clonar Eliminado ---
+        # if not CLONE_MODE:
+        #     buttons_list.append([InlineKeyboardButton('🤖 Clonar Bot', callback_data='clone')])
 
         reply_markup = InlineKeyboardMarkup(buttons_list)
         me = client.me
@@ -552,12 +552,12 @@ async def start(client: Client, message: Message):
         if AUTO_DELETE_MODE and filesarr:
             logger.info(f"Iniciando Auto-Delete para el lote enviado a {user_id} ({len(filesarr)} archivos). Tiempo: {AUTO_DELETE_TIME}s")
             try:
-                # Enviar mensaje de advertencia sobre auto-borrado
+                # --- Mensaje IMPORTANTE Actualizado ---
                 warn_msg_text = (
-                    f"<blockquote><b><u>❗️❗️❗️ IMPORTANTE ❗️❗️❗️</u></b>\n\n"
-                    f"Los archivos anteriores serán eliminados automáticamente en <b><u>{AUTO_DELETE} minutos</u></b> 🗑️ "
-                    f"<i>(Debido a políticas de copyright)</i>.\n\n"
-                    f"<b><i>Por favor, reenvía los mensajes importantes a tus 'Mensajes Guardados' o a otro chat privado antes de que desaparezcan.</i></b></blockquote>"
+                    f"<blockquote><b><u>❗️❗️❗️IMPORTANTE❗️️❗️❗️</u></b>\n\n"
+                    f"Este mensaje será eliminado en <b><u>{AUTO_DELETE} minutos</u></b> 🫥 " # Usando la variable AUTO_DELETE
+                    f"<i>(Debido a problemas de derechos de autor)</i>.\n\n"
+                    f"<b><i>Por favor, reenvía este mensaje a tus mensajes guardados o a cualquier chat privado.</i></b></blockquote>"
                 )
                 k = await client.send_message(
                     chat_id=user_id,
@@ -602,25 +602,18 @@ async def start(client: Client, message: Message):
         try:
             # Determinar el ID numérico del mensaje a enviar
             if original_payload_id.startswith("file_"):
-                # Asumiendo formato "file_CHATID_MSGID" o similar, extraer solo MSGID
-                # ¡CUIDADO! Esto asume que el ID real es la última parte después del último '_'
-                # Sería más robusto si el formato fuera fijo y conocido.
-                # Si el ID original ya *es* el message_id, esto fallará.
-                # Mejor asumir que original_payload_id ES el message_id a menos que se demuestre lo contrario.
                 try:
-                    # Intentar extraer si tiene formato "prefix_id"
                     parts = original_payload_id.split("_")
                     if len(parts) > 1 and parts[-1].isdigit():
                          decode_file_id = int(parts[-1])
                          logger.debug(f"Extraído ID {decode_file_id} de payload {original_payload_id}")
-                    else: # Si no tiene '_' o la última parte no es dígito, asumir que todo es el ID
+                    else:
                          decode_file_id = int(original_payload_id)
                          logger.debug(f"Asumiendo que {original_payload_id} es el ID completo.")
                 except ValueError:
                      logger.error(f"No se pudo convertir '{original_payload_id}' o parte de él a un ID numérico.")
                      raise ValueError("Payload de archivo único inválido.")
             else:
-                # Si no empieza con "file_", asumir que todo el payload es el ID
                 decode_file_id = int(original_payload_id)
                 logger.debug(f"Payload no empieza con 'file_', asumiendo ID directo: {decode_file_id}")
 
@@ -635,7 +628,6 @@ async def start(client: Client, message: Message):
             original_msg = await client.get_messages(log_channel_int, decode_file_id)
 
             if not original_msg:
-                # Lanzar error específico si el mensaje no se encuentra
                 raise MessageIdInvalid(f"Mensaje con ID {decode_file_id} no encontrado en el canal de logs ({log_channel_int}).")
 
             logger.info(f"Mensaje {decode_file_id} obtenido. Preparando para enviar a {user_id}.")
@@ -652,13 +644,11 @@ async def start(client: Client, message: Message):
                     title = formate_file_name(getattr(media, "file_name", ""))
                     size = get_size(getattr(media, "file_size", 0))
                     f_caption_orig = getattr(original_msg, 'caption', '')
-                    # Preservar formato HTML si existe
                     if f_caption_orig and hasattr(f_caption_orig, 'html'):
                         f_caption_orig = f_caption_orig.html
                     elif f_caption_orig:
                          f_caption_orig = str(f_caption_orig)
 
-                    # Formatear caption según CUSTOM_FILE_CAPTION
                     if CUSTOM_FILE_CAPTION:
                         try:
                             f_caption = CUSTOM_FILE_CAPTION.format(
@@ -669,17 +659,14 @@ async def start(client: Client, message: Message):
                             logger.debug(f"Caption formateado con CUSTOM_FILE_CAPTION: '{f_caption[:50]}...'")
                         except Exception as e:
                             logger.error(f"Error al formatear CUSTOM_FILE_CAPTION: {e}. Usando fallback.")
-                            # Fallback: Usar caption original o nombre de archivo
                             f_caption = f_caption_orig if f_caption_orig else (f"<code>{title}</code>" if title else "Archivo")
                     elif f_caption_orig:
-                        f_caption = f_caption_orig # Usar caption original si existe y no hay custom
+                        f_caption = f_caption_orig
                         logger.debug("Usando caption original del mensaje.")
                     else:
-                        # Si no hay custom ni original, usar nombre de archivo
-                        f_caption = f"<code>{title}</code>" if title else None # None si ni siquiera hay título
+                        f_caption = f"<code>{title}</code>" if title else None
                         logger.debug(f"Usando nombre de archivo como caption: '{f_caption}'")
 
-                    # Generar botones de Stream si aplica
                     if STREAM_MODE and (original_msg.video or original_msg.document):
                         try:
                             file_name_for_url = get_name(original_msg)
@@ -698,23 +685,22 @@ async def start(client: Client, message: Message):
                             logger.debug("Botones de Stream generados para archivo único.")
                         except Exception as stream_err:
                            logger.error(f"Error generando botones de stream para archivo único {original_msg.id}: {stream_err}")
-                           reply_markup = None # No poner botones si falló
+                           reply_markup = None
                 else:
                      logger.warning(f"Mensaje {original_msg.id} tiene atributo 'media' pero no se pudo obtener el objeto media concreto.")
-                     f_caption = "⚠️ Error al obtener detalles del archivo." # Caption de error
+                     f_caption = "⚠️ Error al obtener detalles del archivo."
             else:
-                 # Mensaje original sin media (solo texto, etc.)
                  logger.debug(f"Mensaje {original_msg.id} no tiene media. Se copiará tal cual.")
-                 f_caption = None # No necesita caption si se copia texto
-                 reply_markup = None # No necesita botones
+                 f_caption = None
+                 reply_markup = None
 
             # Copiar el mensaje al usuario usando caption/botones preparados
             logger.debug(f"Copiando mensaje {original_msg.id} a {user_id} con caption: '{str(f_caption)[:50]}...' y markup: {reply_markup is not None}")
             sent_file_msg = await original_msg.copy(
                 chat_id=user_id,
-                caption=f_caption, # Pyrogram maneja si es None
-                reply_markup=reply_markup, # Pyrogram maneja si es None
-                protect_content=False # Asegurar que el contenido enviado NO esté protegido (a menos que el original lo estuviera y copy() lo herede)
+                caption=f_caption,
+                reply_markup=reply_markup,
+                protect_content=False
             )
             logger.info(f"Mensaje {original_msg.id} enviado a {user_id} como mensaje {sent_file_msg.id}")
 
@@ -722,12 +708,12 @@ async def start(client: Client, message: Message):
             if AUTO_DELETE_MODE:
                 logger.info(f"Iniciando Auto-Delete para archivo único {sent_file_msg.id} enviado a {user_id}. Tiempo: {AUTO_DELETE_TIME}s")
                 try:
-                    # Enviar mensaje de advertencia
+                    # --- Mensaje IMPORTANTE Actualizado ---
                     warn_msg_text = (
-                        f"<blockquote><b><u>❗️❗️❗️ IMPORTANTE ❗️❗️❗️</u></b>\n\n"
-                        f"Este mensaje será eliminado automáticamente en <b><u>{AUTO_DELETE} minutos</u></b> 🗑️ "
-                        f"<i>(Debido a políticas de copyright)</i>.\n\n"
-                        f"<b><i>Por favor, reenvía el mensaje a tus 'Mensajes Guardados' o a otro chat privado antes de que desaparezca.</i></b></blockquote>"
+                        f"<blockquote><b><u>❗️❗️❗️IMPORTANTE❗️️❗️❗️</u></b>\n\n"
+                        f"Este mensaje será eliminado en <b><u>{AUTO_DELETE} minutos</u></b> 🫥 " # Usando la variable AUTO_DELETE
+                        f"<i>(Debido a problemas de derechos de autor)</i>.\n\n"
+                        f"<b><i>Por favor, reenvía este mensaje a tus mensajes guardados o a cualquier chat privado.</i></b></blockquote>"
                     )
                     k = await client.send_message(
                         chat_id=user_id,
@@ -747,7 +733,6 @@ async def start(client: Client, message: Message):
                          logger.warning(f"Mensaje {sent_file_msg.id} ya no existía al intentar borrarlo.")
                     except Exception as del_err:
                          logger.error(f"Error al borrar mensaje {sent_file_msg.id} en auto-delete: {del_err}")
-
 
                     # Editar mensaje de advertencia para confirmar
                     try:
@@ -774,7 +759,7 @@ async def start(client: Client, message: Message):
             await message.reply_text("❌ Ocurrió un error inesperado al intentar obtener el archivo.")
         return
 
-# --- Comandos /api, /base_site, /stats (Formateados) ---
+# --- Comandos /api, /base_site, /stats (Sin cambios aquí) ---
 @Client.on_message(filters.command('api') & filters.private)
 async def shortener_api_handler(client, m: Message):
     """Maneja el comando /api para ver o establecer la API del acortador."""
@@ -886,12 +871,8 @@ async def base_site_handler(client, m: Message):
         else:
             # Validar si es un dominio válido (básico)
             try:
-                # Añadir http:// temporalmente para que `validators.domain` funcione mejor
-                # ya que espera una estructura más similar a URL.
-                # Quitarlo antes de guardar.
                 temp_url_for_validation = f"http://{base_site_input}"
                 is_valid = domain(temp_url_for_validation)
-                # Guardar el dominio limpio (sin http://)
                 domain_to_save = base_site_input
             except Exception as val_err:
                 logger.warning(f"{log_prefix} Validación de dominio fallida para '{base_site_input}': {val_err}")
@@ -928,27 +909,15 @@ async def base_site_handler(client, m: Message):
 async def simple_stats_command(client, message: Message):
     """Muestra estadísticas básicas (solo para admins)."""
     log_prefix = f"CMD /stats (Admin: {message.from_user.id}):"
-    # Comentado porque el filtro user(ADMINS) ya lo hace
-    # if message.from_user.id not in ADMINS:
-    #    logger.warning(f"{log_prefix} Acceso denegado (no admin).")
-    #    return await message.reply_text("❌ **Acceso denegado.** Este comando es solo para administradores.")
 
     try:
-        # Mostrar acción de "escribiendo..."
         await client.send_chat_action(message.chat.id, enums.ChatAction.TYPING)
-
-        # Obtener el número total de usuarios
         total_users = await db.total_users_count()
         logger.info(f"{log_prefix} Obteniendo estadísticas. Total usuarios: {total_users}")
 
-        # Preparar y enviar el mensaje de estadísticas
         stats_text = (
             f"📊 **Estadísticas del Bot**\n\n"
             f"👥 Usuarios Totales Registrados: `{total_users}`\n\n"
-            # Puedes añadir más estadísticas aquí si las tienes disponibles
-            # f"⚙️ Modo Clonar: {'Activado' if CLONE_MODE else 'Desactivado'}\n"
-            # f"🔒 Modo Verificación: {'Activado' if VERIFY_MODE else 'Desactivado'}\n"
-            # f"🗑️ Auto-Borrado: {'Activado' if AUTO_DELETE_MODE else 'Desactivado'}"
         )
         await message.reply_text(stats_text, quote=True)
 
@@ -969,7 +938,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
     logger.debug(f"{log_prefix} Callback recibido.")
 
     try:
-        # Obtener mention del bot de forma segura
         try:
             me_mention = client.me.mention if client.me else (await client.get_me()).mention
         except Exception as e:
@@ -978,14 +946,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
         # --- Manejar diferentes datos de callback ---
 
-        # Cerrar mensaje
         if q_data == "close_data":
             logger.debug(f"{log_prefix} Solicitud para cerrar mensaje {message.id}")
             await message.delete()
-            # Responder al callback para quitar el "loading" del botón
             await query.answer()
 
-        # Sección 'Acerca de'
         elif q_data == "about":
             logger.debug(f"{log_prefix} Mostrando sección 'About'")
             buttons = [[
@@ -993,20 +958,17 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 InlineKeyboardButton('✖️ Cerrar', callback_data='close_data')
             ]]
             markup = InlineKeyboardMarkup(buttons)
-            # Asegurarse de que el texto del script exista
             about_text = getattr(script, 'ABOUT_TXT', "Información no disponible.")
-            if '{me_mention}' in about_text: # Formatear si es necesario
+            if '{me_mention}' in about_text:
                  about_text = about_text.format(me_mention=me_mention)
 
             await query.edit_message_text(
                 about_text,
                 reply_markup=markup,
-                #parse_mode=enums.ParseMode.HTML, # Asumir HTML si el script lo usa
                 disable_web_page_preview=True
             )
-            await query.answer() # Confirmar recepción
+            await query.answer()
 
-        # Volver al Inicio / Mostrar Inicio
         elif q_data == "start":
             logger.debug(f"{log_prefix} Mostrando sección 'Start'")
             buttons = [
@@ -1015,119 +977,100 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 [InlineKeyboardButton('❓ Ayuda', callback_data='help'),
                  InlineKeyboardButton('ℹ️ Acerca de', callback_data='about')]
             ]
-            if not CLONE_MODE:
-                buttons.append([InlineKeyboardButton('🤖 Clonar Bot', callback_data='clone')])
+            # --- Botón Clonar Eliminado ---
+            # if not CLONE_MODE:
+            #     buttons.append([InlineKeyboardButton('🤖 Clonar Bot', callback_data='clone')])
             markup = InlineKeyboardMarkup(buttons)
 
-            # Asegurarse de que el texto del script exista
             start_text = getattr(script, 'START_TXT', "Bienvenido!")
-            if '{message.from_user.mention}' in start_text or '{me.mention}' in start_text:
-                start_text = start_text.format(mention=query.from_user.mention, me_mention=me_mention)
-            # Alternativa si el formato es diferente:
-            # start_text = start_text.format(query.from_user.mention, me_mention)
+            if '{mention}' in start_text or '{me_mention}' in start_text: # Adaptar según formato exacto en Script.py
+                 start_text = start_text.format(mention=query.from_user.mention, me_mention=me_mention)
+            elif '{message.from_user.mention}' in start_text or '{me.mention}' in start_text: # Formato alternativo
+                  start_text = start_text.format(mention=query.from_user.mention, me_mention=me_mention) # O usar las variables directas si están disponibles
 
 
-            # Intentar editar el texto primero
             try:
                 await query.edit_message_text(
                     start_text,
                     reply_markup=markup,
-                    #parse_mode=enums.ParseMode.HTML, # Asumir HTML si el script lo usa
                     disable_web_page_preview=True
                 )
             except MessageNotModified:
                 logger.debug(f"{log_prefix} Mensaje 'Start' no modificado (ya estaba visible).")
-                pass # No hacer nada si el contenido es el mismo
+                pass
             except Exception as edit_text_err:
                  logger.warning(f"{log_prefix} Fallo al editar texto para 'Start': {edit_text_err}. Intentando editar media.")
-                 # Intentar editar media si el mensaje original tenía foto
                  try:
                      photo_url = random.choice(PICS) if PICS else None
-                     if photo_url and query.message.photo: # Solo intentar si hay foto original y tenemos PICS
+                     if photo_url and query.message.photo:
                           await query.edit_message_media(
                               media=InputMediaPhoto(photo_url),
                               reply_markup=markup
                           )
-                          # Es necesario editar el caption después de editar la media
                           await query.edit_message_caption(
                               caption=start_text,
                               reply_markup=markup
-                              #parse_mode=enums.ParseMode.HTML
                           )
-                     else: # Si no había foto o no hay PICS, no hacer nada más
+                     else:
                           logger.warning(f"{log_prefix} No se pudo editar ni texto ni media para 'Start'.")
                  except MessageNotModified:
                       logger.debug(f"{log_prefix} Media/Caption 'Start' no modificado.")
                       pass
                  except Exception as e_media:
                      logger.error(f"{log_prefix} Fallo CRÍTICO al editar media/caption para 'Start': {e_media}")
-            await query.answer() # Confirmar recepción
-
-        # Sección 'Clonar'
-        elif q_data == "clone":
-            logger.debug(f"{log_prefix} Mostrando sección 'Clone'")
-            buttons = [[
-                InlineKeyboardButton('🏠 Inicio', callback_data='start'),
-                InlineKeyboardButton('✖️ Cerrar', callback_data='close_data')
-            ]]
-            markup = InlineKeyboardMarkup(buttons)
-            # Asegurarse de que el texto del script exista
-            clone_text = getattr(script, 'CLONE_TXT', "Instrucciones de clonación no disponibles.")
-            if '{query.from_user.mention}' in clone_text:
-                 clone_text = clone_text.format(mention=query.from_user.mention)
-            # Alternativa: clone_text = clone_text.format(query.from_user.mention)
-
-            await query.edit_message_text(
-                clone_text,
-                reply_markup=markup,
-                #parse_mode=enums.ParseMode.HTML,
-                disable_web_page_preview=True
-            )
             await query.answer()
 
-        # Sección 'Ayuda'
+        # --- Bloque 'clone' Eliminado ---
+        # elif q_data == "clone":
+        #      logger.debug(f"{log_prefix} Mostrando sección 'Clone'")
+        #      buttons = [[InlineKeyboardButton('🏠 Inicio', callback_data='start'), InlineKeyboardButton('✖️ Cerrar', callback_data='close_data')]]; markup = InlineKeyboardMarkup(buttons)
+        #      clone_text = getattr(script, 'CLONE_TXT', "Instrucciones de clonación no disponibles.")
+        #      if '{query.from_user.mention}' in clone_text:
+        #          clone_text = clone_text.format(mention=query.from_user.mention)
+        #
+        #      await query.edit_message_text(
+        #          clone_text,
+        #          reply_markup=markup,
+        #          disable_web_page_preview=True
+        #      )
+        #      await query.answer()
+
         elif q_data == "help":
-            logger.debug(f"{log_prefix} Mostrando sección 'Help'")
-            buttons = [[
-                InlineKeyboardButton('🏠 Inicio', callback_data='start'),
-                InlineKeyboardButton('✖️ Cerrar', callback_data='close_data')
-            ]]
-            markup = InlineKeyboardMarkup(buttons)
-            # Asegurarse de que el texto del script exista
-            help_text = getattr(script, 'HELP_TXT', "Ayuda no disponible.")
+             logger.debug(f"{log_prefix} Mostrando sección 'Help'")
+             buttons = [[
+                 InlineKeyboardButton('🏠 Inicio', callback_data='start'),
+                 InlineKeyboardButton('✖️ Cerrar', callback_data='close_data')
+             ]]
+             markup = InlineKeyboardMarkup(buttons)
+             help_text = getattr(script, 'HELP_TXT', "Ayuda no disponible.")
 
-            await query.edit_message_text(
-                help_text,
-                reply_markup=markup,
-                #parse_mode=enums.ParseMode.HTML,
-                disable_web_page_preview=True
-            )
-            await query.answer()
+             await query.edit_message_text(
+                 help_text,
+                 reply_markup=markup,
+                 disable_web_page_preview=True
+             )
+             await query.answer()
 
-        # Callback no reconocido
         else:
             logger.warning(f"{log_prefix} Callback no reconocido.")
             await query.answer("Esta opción no está implementada o es inválida.", show_alert=False)
 
     except MessageNotModified:
         logger.debug(f"{log_prefix} Mensaje no modificado (contenido idéntico).")
-        await query.answer() # Es importante responder para quitar el "loading"
+        await query.answer()
     except Exception as e:
         logger.error(f"{log_prefix} Error procesando callback: {e}", exc_info=True)
         try:
-            # Intentar notificar al usuario del error
             await query.answer("❌ Ocurrió un error al procesar tu solicitud.", show_alert=True)
         except Exception as answer_err:
              logger.error(f"{log_prefix} Error incluso al intentar responder al callback con error: {answer_err}")
 
 
-# --- Comandos Premium (Formateados y con Ayuda Añadida) ---
+# --- Comandos Premium (Sin cambios aquí) ---
 @Client.on_message(filters.command("addpremium") & filters.private & filters.user(ADMINS))
 async def add_premium_command(client, message: Message):
     """Añade acceso premium a un usuario (Admin Only)."""
     log_prefix = f"CMD /addpremium (Admin: {message.from_user.id}):"
-
-    # Añadido: Texto de ayuda si el formato es incorrecto
     usage_text = (
         "ℹ️ **Cómo usar /addpremium:**\n\n"
         "Este comando otorga acceso Premium a un usuario.\n\n"
@@ -1151,7 +1094,7 @@ async def add_premium_command(client, message: Message):
         logger.warning(f"{log_prefix} ID de usuario inválido: {message.command[1]}")
         return await message.reply_text(f"❌ ID de usuario inválido.\n\n{usage_text}")
 
-    days = None # Por defecto es permanente
+    days = None
     if len(message.command) == 3:
         try:
             days = int(message.command[2])
@@ -1160,23 +1103,17 @@ async def add_premium_command(client, message: Message):
             logger.warning(f"{log_prefix} Número de días inválido: {message.command[2]} ({e})")
             return await message.reply_text(f"❌ Número de días inválido. Debe ser un entero positivo.\n\n{usage_text}")
 
-    # Verificar si el usuario existe en la base de datos del bot
     if not await db.is_user_exist(target_user_id):
         logger.warning(f"{log_prefix} Usuario {target_user_id} no encontrado en la base de datos.")
-        # Podrías cambiar este mensaje si quieres añadir usuarios que no han iniciado el bot
         return await message.reply_text(f"❌ Usuario con ID `{target_user_id}` no encontrado. Asegúrate de que haya iniciado el bot al menos una vez.")
 
     try:
-        # Intentar establecer el estado premium
         success = await db.set_premium(target_user_id, days)
-
         if success:
             d_txt = f"por {days} días" if days else "de forma permanente"
             confirmation_msg = f"✅ ¡Acceso Premium activado para el usuario `{target_user_id}` {d_txt}!"
             await message.reply_text(confirmation_msg)
             logger.info(f"{log_prefix} Premium activado para {target_user_id} {d_txt}.")
-
-            # Notificar al usuario que recibió premium
             try:
                 await client.send_message(
                     target_user_id,
@@ -1186,21 +1123,16 @@ async def add_premium_command(client, message: Message):
                 logger.warning(f"{log_prefix} No se pudo notificar al usuario {target_user_id} sobre su nuevo premium: {notify_err}")
                 await message.reply_text("ℹ️ *Nota: No se pudo notificar al usuario directamente (quizás bloqueó al bot).*")
         else:
-            # Esto podría ocurrir si la función db.set_premium devuelve False por alguna razón interna
             logger.error(f"{log_prefix} La función db.set_premium devolvió False para {target_user_id}.")
             await message.reply_text(f"❌ Ocurrió un error inesperado al intentar activar premium para `{target_user_id}`.")
-
     except Exception as e:
         logger.error(f"{log_prefix} Error CRÍTICO durante set_premium para {target_user_id}: {e}", exc_info=True)
         await message.reply_text("❌ Error interno del servidor al procesar la solicitud.")
-
 
 @Client.on_message(filters.command("delpremium") & filters.private & filters.user(ADMINS))
 async def del_premium_command(client, message: Message):
     """Elimina el acceso premium de un usuario (Admin Only)."""
     log_prefix = f"CMD /delpremium (Admin: {message.from_user.id}):"
-
-    # Añadido: Texto de ayuda si el formato es incorrecto
     usage_text = (
         "ℹ️ **Cómo usar /delpremium:**\n\n"
         "Este comando elimina el acceso Premium de un usuario.\n\n"
@@ -1220,26 +1152,20 @@ async def del_premium_command(client, message: Message):
         logger.warning(f"{log_prefix} ID de usuario inválido: {message.command[1]}")
         return await message.reply_text(f"❌ ID de usuario inválido.\n\n{usage_text}")
 
-    # Verificar si el usuario existe
     if not await db.is_user_exist(target_user_id):
         logger.warning(f"{log_prefix} Usuario {target_user_id} no encontrado.")
         return await message.reply_text(f"❌ Usuario con ID `{target_user_id}` no encontrado en la base de datos.")
 
-    # Verificar si el usuario realmente tiene premium antes de intentar quitarlo
     if not await db.check_premium_status(target_user_id):
          logger.info(f"{log_prefix} El usuario {target_user_id} ya no tenía premium.")
          return await message.reply_text(f"ℹ️ El usuario `{target_user_id}` no tiene acceso Premium activo actualmente.")
 
     try:
-        # Intentar eliminar el estado premium
         success = await db.remove_premium(target_user_id)
-
         if success:
             confirmation_msg = f"✅ Acceso Premium desactivado para el usuario `{target_user_id}`."
             await message.reply_text(confirmation_msg)
             logger.info(f"{log_prefix} Premium desactivado para {target_user_id}.")
-
-            # Notificar al usuario que perdió premium
             try:
                 await client.send_message(
                     target_user_id,
@@ -1249,10 +1175,8 @@ async def del_premium_command(client, message: Message):
                 logger.warning(f"{log_prefix} No se pudo notificar al usuario {target_user_id} sobre la pérdida de premium: {notify_err}")
                 await message.reply_text("ℹ️ *Nota: No se pudo notificar al usuario directamente.*")
         else:
-            # Si db.remove_premium devuelve False
             logger.error(f"{log_prefix} La función db.remove_premium devolvió False para {target_user_id}.")
             await message.reply_text(f"❌ Ocurrió un error inesperado al intentar desactivar premium para `{target_user_id}`.")
-
     except Exception as e:
         logger.error(f"{log_prefix} Error CRÍTICO durante remove_premium para {target_user_id}: {e}", exc_info=True)
         await message.reply_text("❌ Error interno del servidor al procesar la solicitud.")
