@@ -7,7 +7,7 @@ import base64
 import logging
 from pyrogram.types import Message
 from pyrogram import filters, Client, enums
-from pyrogram.errors import ChannelInvalid, UsernameInvalid, UsernameNotModified
+from pyrogram.errors import ChannelInvalid, UsernameInvalid, UsernameNotModified, MessageNotModified # Añadido MessageNotModified
 from config import ADMINS, LOG_CHANNEL, PUBLIC_FILE_STORE, WEBSITE_URL, WEBSITE_URL_MODE
 # Asumimos que get_user y get_short_link existen en users_api o donde corresponda
 try:
@@ -155,6 +155,8 @@ async def gen_link_s(bot: Client, message: Message):
 @Client.on_message(filters.command(['batch']) & filters.create(allowed))
 async def gen_link_batch(bot: Client, message: Message):
     user_id = message.from_user.id
+    # --- CORRECCIÓN: Añadir definición de user_mention ---
+    user_mention = message.from_user.mention
     logger.info(f"Generando enlaces BATCH Normal/Premium con /batch para {user_id}")
 
     # --- Bloque de Ayuda Añadido ---
@@ -223,7 +225,8 @@ Genera enlaces de lote para un rango de mensajes.
             tot += 1
             if tot % 25 == 0:
                  try: await sts.edit(FRMT.format(current=tot, total=total_estimate, percent=round((tot/total_estimate)*100)))
-                 except: pass # Ignorar errores al editar (ej. MessageNotModified)
+                 except MessageNotModified: pass # Ignorar si no se modificó
+                 except Exception as edit_err: logger.warning(f"Error editando estado /batch: {edit_err}") # Loggear otros errores de edición
             if msg.empty or msg.service: continue
             # Añadir información necesaria al JSON
             file = { "channel_id": str(chat_id), "msg_id": msg.id }
@@ -240,12 +243,13 @@ Genera enlaces de lote para un rango de mensajes.
     if not outlist: return await sts.edit("❌ No se encontraron mensajes válidos en el rango especificado.")
     logger.info(f"Lote generado para {user_id}. {og_msg} mensajes encontrados.") # Usar og_msg que cuenta los mensajes realmente añadidos
 
-    # --- Guardar JSON, enviar a LOG_CHANNEL (sin cambios) ---
+    # --- Guardar JSON, enviar a LOG_CHANNEL ---
     json_file_path = f"batch_{user_id}_{start_id}_{end_id}.json" # Nombre de archivo más descriptivo
     json_msg_id = None # Inicializar
     try:
         with open(json_file_path, "w+") as out: json.dump(outlist, out)
         # Enviar el documento a LOG_CHANNEL
+        # --- CORRECCIÓN: Usar user_mention definida al inicio ---
         post = await bot.send_document(
             LOG_CHANNEL,
             json_file_path,
@@ -255,7 +259,10 @@ Genera enlaces de lote para un rango de mensajes.
         json_msg_id = str(post.id) # Guardar el ID del mensaje que contiene el JSON
     except Exception as send_err:
         logger.error(f"Error enviando JSON batch a LOG_CHANNEL: {send_err}", exc_info=True)
-        return await sts.edit("❌ Error interno al guardar la información del lote.")
+        # Informar al usuario del error específico si es posible
+        await sts.edit(f"❌ Error interno al guardar la información del lote: {send_err}")
+        # No continuar si falla el guardado en log channel
+        return
     finally:
         # Asegurarse de borrar el archivo JSON local
         if os.path.exists(json_file_path):
