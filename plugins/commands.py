@@ -759,7 +759,7 @@ async def start(client: Client, message: Message):
             await message.reply_text("❌ Ocurrió un error inesperado al intentar obtener el archivo.")
         return
 
-# --- Comandos /api, /base_site, /stats (Sin cambios aquí) ---
+# --- Comandos /api, /base_site, /stats ---
 @Client.on_message(filters.command('api') & filters.private)
 async def shortener_api_handler(client, m: Message):
     """Maneja el comando /api para ver o establecer la API del acortador."""
@@ -767,14 +767,27 @@ async def shortener_api_handler(client, m: Message):
     log_prefix = f"CMD /api (User: {user_id}):" # Prefijo para logs
 
     try:
-        user_data = await get_user(user_id)
-        # Usar .get con valor por defecto si el usuario o las claves no existen
-        user_base_site = user_data.get("base_site", "No Configurado") if user_data else "N/A (Usuario no encontrado)"
-        user_shortener_api = user_data.get("shortener_api", "No Configurada") if user_data else "N/A (Usuario no encontrado)"
-        logger.debug(f"{log_prefix} Datos actuales: base_site='{user_base_site}', api='{user_shortener_api[:5]}...'")
+        user_data = await get_user(user_id) # Puede devolver None si no se encuentra
+
+        # --- MODIFICACIÓN: Comprobar si user_data es None ---
+        if user_data is None:
+            logger.warning(f"{log_prefix} No se encontraron datos para el usuario {user_id} en users_api.")
+            # Asignar valores por defecto o mostrar error específico
+            user_base_site = "No Encontrado"
+            user_shortener_api = "No Encontrada"
+            # Opcionalmente, podrías parar aquí si es un error crítico para la función:
+            # return await m.reply_text("❌ No se pudo encontrar tu configuración de API. Asegúrate de estar registrado en el sistema de usuarios.")
+        else:
+            # Proceder como antes si user_data no es None
+            user_base_site = user_data.get("base_site", "No Configurado")
+            user_shortener_api = user_data.get("shortener_api", "No Configurada")
+
+        logger.debug(f"{log_prefix} Datos (posiblemente por defecto): base_site='{user_base_site}', api='{str(user_shortener_api)[:5]}...'")
+
     except Exception as e:
-        logger.error(f"{log_prefix} Error al obtener datos del usuario desde users_api: {e}")
-        return await m.reply_text("❌ Ocurrió un error al consultar tu configuración de API.")
+        # Captura otros posibles errores durante get_user
+        logger.error(f"{log_prefix} Error EXCEPCIONAL al obtener datos del usuario desde users_api: {e}", exc_info=True)
+        return await m.reply_text("❌ Ocurrió un error crítico al consultar tu configuración de API.")
 
     cmd = m.command
     # Comando sin argumentos: Mostrar configuración actual
@@ -782,6 +795,7 @@ async def shortener_api_handler(client, m: Message):
         try:
             # Asegurarse de que el texto del script exista
             if hasattr(script, 'SHORTENER_API_MESSAGE'):
+                 # Usar los valores (posiblemente por defecto) obtenidos arriba
                  s = script.SHORTENER_API_MESSAGE.format(base_site=user_base_site, shortener_api=user_shortener_api)
                  await m.reply_text(s)
             else:
@@ -793,11 +807,11 @@ async def shortener_api_handler(client, m: Message):
 
     # Comando con un argumento: Establecer o eliminar API
     elif len(cmd) == 2:
+        # La lógica de actualización puede fallar si el usuario no existe realmente en users_api
+        # pero el try/except existente debería manejarlo.
         api_key_input = cmd[1].strip()
-        # Permitir 'None' (case-insensitive) para eliminar la API
         update_value = None if api_key_input.lower() == "none" else api_key_input
 
-        # Validar que la API no sea una cadena vacía si no es None
         if update_value == "":
             logger.warning(f"{log_prefix} Intento de establecer API vacía.")
             return await m.reply_text("❌ La clave API no puede ser una cadena vacía. Usa `/api None` para eliminarla.")
@@ -806,13 +820,14 @@ async def shortener_api_handler(client, m: Message):
         logger.info(f"{log_prefix} {log_msg_action} la Shortener API.")
 
         try:
+            # Esta llamada podría fallar si users_api requiere que el user exista
             await update_user_info(user_id, {"shortener_api": update_value})
             reply_msg = "✅ Tu API de acortador ha sido eliminada." if update_value is None else "✅ Tu API de acortador ha sido actualizada correctamente."
             await m.reply_text(reply_msg)
-            logger.info(f"{log_prefix} Actualización de API exitosa.")
+            logger.info(f"{log_prefix} Actualización de API (intento) exitosa.")
         except Exception as e:
             logger.error(f"{log_prefix} Error al actualizar la API en users_api: {e}")
-            await m.reply_text("❌ Ocurrió un error al intentar actualizar tu API.")
+            await m.reply_text("❌ Ocurrió un error al intentar actualizar tu API (¿Estás registrado en el sistema de usuarios?).")
 
     # Comando con formato incorrecto
     else:
@@ -832,11 +847,17 @@ async def base_site_handler(client, m: Message):
 
     try:
         user_data = await get_user(user_id)
-        current_site = user_data.get("base_site", "Ninguno configurado") if user_data else "N/A (Usuario no encontrado)"
-        logger.debug(f"{log_prefix} Sitio base actual: '{current_site}'")
+        # --- MODIFICACIÓN: Comprobar si user_data es None ---
+        if user_data is None:
+            logger.warning(f"{log_prefix} No se encontraron datos para el usuario {user_id} en users_api.")
+            current_site = "No Encontrado"
+        else:
+            current_site = user_data.get("base_site", "Ninguno configurado")
+
+        logger.debug(f"{log_prefix} Sitio base actual (puede ser por defecto): '{current_site}'")
     except Exception as e:
-        logger.error(f"{log_prefix} Error al obtener datos del usuario desde users_api: {e}")
-        return await m.reply_text("❌ Ocurrió un error al consultar tu configuración de sitio base.")
+        logger.error(f"{log_prefix} Error EXCEPCIONAL al obtener datos del usuario desde users_api: {e}", exc_info=True)
+        return await m.reply_text("❌ Ocurrió un error crítico al consultar tu configuración de sitio base.")
 
     cmd = m.command
     # Texto de ayuda/estado base
@@ -860,41 +881,48 @@ async def base_site_handler(client, m: Message):
         if base_site_input.lower() == "none":
             logger.info(f"{log_prefix} Solicitud para eliminar el sitio base.")
             try:
+                # Podría fallar si el usuario no existe en users_api
                 await update_user_info(user_id, {"base_site": None})
                 await m.reply_text("✅ Tu sitio base ha sido eliminado.")
-                logger.info(f"{log_prefix} Eliminación de sitio base exitosa.")
+                logger.info(f"{log_prefix} Eliminación de sitio base (intento) exitosa.")
             except Exception as e:
                 logger.error(f"{log_prefix} Error al eliminar el sitio base en users_api: {e}")
-                await m.reply_text("❌ Ocurrió un error al intentar eliminar tu sitio base.")
+                await m.reply_text("❌ Ocurrió un error al intentar eliminar tu sitio base (¿Estás registrado?).")
 
         # Establecer nuevo sitio base
         else:
             # Validar si es un dominio válido (básico)
+            is_valid = False # Asumir inválido inicialmente
+            domain_to_save = base_site_input # Guardar el input limpio
             try:
-                temp_url_for_validation = f"http://{base_site_input}"
+                # Usar http:// temporalmente para la validación
+                temp_url_for_validation = f"http://{domain_to_save}"
                 is_valid = domain(temp_url_for_validation)
-                domain_to_save = base_site_input
             except Exception as val_err:
-                logger.warning(f"{log_prefix} Validación de dominio fallida para '{base_site_input}': {val_err}")
+                # Capturar error de validación específico
+                logger.warning(f"{log_prefix} Validación de dominio fallida para '{domain_to_save}': {val_err}")
                 is_valid = False
 
             if not is_valid:
-                logger.warning(f"{log_prefix} Intento de establecer sitio base inválido: '{base_site_input}'")
+                logger.warning(f"{log_prefix} Intento de establecer sitio base inválido: '{domain_to_save}'")
+                # Devolver texto de ayuda + error específico
                 return await m.reply_text(
                     f"{help_text}\n\n"
-                    f"❌ **Error:** '{base_site_input}' no parece ser un nombre de dominio válido. "
+                    f"❌ **Error:** '{domain_to_save}' no parece ser un nombre de dominio válido. "
                     f"Asegúrate de introducir solo el dominio (ej: `ejemplo.com`) sin `http://` o `/` al final.",
                     disable_web_page_preview=True
                 )
 
+            # Si la validación pasa
             logger.info(f"{log_prefix} Solicitud para actualizar sitio base a: '{domain_to_save}'")
             try:
+                 # Podría fallar si el usuario no existe en users_api
                 await update_user_info(user_id, {"base_site": domain_to_save})
                 await m.reply_text(f"✅ Tu sitio base ha sido actualizado a: `{domain_to_save}`")
-                logger.info(f"{log_prefix} Actualización de sitio base exitosa.")
+                logger.info(f"{log_prefix} Actualización de sitio base (intento) exitosa.")
             except Exception as e:
                 logger.error(f"{log_prefix} Error al actualizar el sitio base en users_api: {e}")
-                await m.reply_text("❌ Ocurrió un error al intentar actualizar tu sitio base.")
+                await m.reply_text("❌ Ocurrió un error al intentar actualizar tu sitio base (¿Estás registrado?).")
 
     # Comando con formato incorrecto
     else:
@@ -903,7 +931,6 @@ async def base_site_handler(client, m: Message):
             "**Formato incorrecto.**\n\n" + help_text,
             disable_web_page_preview=True
         )
-
 
 @Client.on_message(filters.command("stats") & filters.private & filters.user(ADMINS))
 async def simple_stats_command(client, message: Message):
@@ -978,8 +1005,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
                  InlineKeyboardButton('ℹ️ Acerca de', callback_data='about')]
             ]
             # --- Botón Clonar Eliminado ---
-            # if not CLONE_MODE:
-            #     buttons.append([InlineKeyboardButton('🤖 Clonar Bot', callback_data='clone')])
             markup = InlineKeyboardMarkup(buttons)
 
             start_text = getattr(script, 'START_TXT', "Bienvenido!")
@@ -1021,19 +1046,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.answer()
 
         # --- Bloque 'clone' Eliminado ---
-        # elif q_data == "clone":
-        #      logger.debug(f"{log_prefix} Mostrando sección 'Clone'")
-        #      buttons = [[InlineKeyboardButton('🏠 Inicio', callback_data='start'), InlineKeyboardButton('✖️ Cerrar', callback_data='close_data')]]; markup = InlineKeyboardMarkup(buttons)
-        #      clone_text = getattr(script, 'CLONE_TXT', "Instrucciones de clonación no disponibles.")
-        #      if '{query.from_user.mention}' in clone_text:
-        #          clone_text = clone_text.format(mention=query.from_user.mention)
-        #
-        #      await query.edit_message_text(
-        #          clone_text,
-        #          reply_markup=markup,
-        #          disable_web_page_preview=True
-        #      )
-        #      await query.answer()
 
         elif q_data == "help":
              logger.debug(f"{log_prefix} Mostrando sección 'Help'")
@@ -1066,7 +1078,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
              logger.error(f"{log_prefix} Error incluso al intentar responder al callback con error: {answer_err}")
 
 
-# --- Comandos Premium (Sin cambios aquí) ---
+# --- Comandos Premium ---
 @Client.on_message(filters.command("addpremium") & filters.private & filters.user(ADMINS))
 async def add_premium_command(client, message: Message):
     """Añade acceso premium a un usuario (Admin Only)."""
