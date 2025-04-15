@@ -8,6 +8,7 @@ import os
 import logging
 import random
 import asyncio
+import datetime # Necesario para calcular la expiración
 from validators import domain
 from Script import script
 from plugins.dbusers import db
@@ -445,3 +446,86 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except: pass
     else:
          logger.warning(f"Callback no reconocido: {q_data}"); await query.answer("Opción no implementada", show_alert=False)
+
+
+
+# En plugins/commands.py (Añadir al final del archivo)
+
+# ... (todo tu código existente: start, api, base_site, stats, cb_handler) ...
+
+# --- Añadir import datetime al principio de commands.py si no está
+
+# ======================================================
+# =========== INICIO: NUEVOS COMANDOS PREMIUM ==========
+# ======================================================
+
+@Client.on_message(filters.command("addpremium") & filters.private & filters.user(ADMINS))
+async def add_premium_command(client, message: Message):
+    if len(message.command) < 2:
+        return await message.reply_text("⚠️ Uso: `/addpremium <user_id> [días]`\n(Si no pones días, será permanente)")
+
+    try:
+        target_user_id = int(message.command[1])
+    except ValueError:
+        return await message.reply_text("❌ ID de usuario inválido. Debe ser numérico.")
+
+    days = None
+    if len(message.command) > 2:
+        try:
+            days = int(message.command[2])
+            if days <= 0:
+                return await message.reply_text("❌ Los días deben ser un número positivo.")
+        except ValueError:
+            return await message.reply_text("❌ Los días deben ser un número.")
+
+    # Verificar si el usuario existe en la BD (opcional pero recomendado)
+    if not await db.is_user_exist(target_user_id):
+         # Podríamos añadirlo o dar error. Por ahora, error.
+         # Alternativa: await db.add_user(target_user_id, "Usuario Premium") # Necesitaría obtener el nombre real
+         return await message.reply_text(f"❌ Usuario con ID {target_user_id} no encontrado en la base de datos. ¿Ha iniciado el bot?")
+
+    # Establecer premium usando la función de dbusers.py
+    success = await db.set_premium(target_user_id, days)
+
+    if success:
+        duration_text = f"por {days} días" if days else "permanentemente"
+        await message.reply_text(f"✅ ¡Premium activado para el usuario `{target_user_id}` {duration_text}!")
+        # Opcional: Enviar un mensaje al usuario notificándole
+        try:
+            await client.send_message(target_user_id, f"🎉 ¡Felicidades! Has recibido acceso Premium {duration_text}.")
+        except Exception as send_err:
+            logger.warning(f"No se pudo notificar al usuario {target_user_id} sobre premium: {send_err}")
+    else:
+        await message.reply_text(f"❌ Ocurrió un error al activar premium para `{target_user_id}`.")
+
+
+@Client.on_message(filters.command("delpremium") & filters.private & filters.user(ADMINS))
+async def del_premium_command(client, message: Message):
+    if len(message.command) != 2:
+        return await message.reply_text("⚠️ Uso: `/delpremium <user_id>`")
+
+    try:
+        target_user_id = int(message.command[1])
+    except ValueError:
+        return await message.reply_text("❌ ID de usuario inválido. Debe ser numérico.")
+
+    # Verificar si existe (opcional)
+    if not await db.is_user_exist(target_user_id):
+         return await message.reply_text(f"❌ Usuario con ID {target_user_id} no encontrado.")
+
+    # Quitar premium
+    success = await db.remove_premium(target_user_id)
+
+    if success:
+        await message.reply_text(f"✅ Premium desactivado para el usuario `{target_user_id}`.")
+        # Opcional: Notificar al usuario
+        try:
+            await client.send_message(target_user_id, "ℹ️ Tu acceso Premium ha sido desactivado.")
+        except Exception as send_err:
+             logger.warning(f"No se pudo notificar al usuario {target_user_id} sobre desactivación premium: {send_err}")
+    else:
+        await message.reply_text(f"❌ Ocurrió un error al desactivar premium para `{target_user_id}`.")
+
+# ======================================================
+# ============= FIN: NUEVOS COMANDOS PREMIUM ===========
+# ======================================================
