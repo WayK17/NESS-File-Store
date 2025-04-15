@@ -348,7 +348,7 @@ async def start(client: Client, message: Message):
 
         # Bucle de envío BATCH
         filesarr = []; total_msgs = len(msgs); logger.info(f"Enviando {total_msgs} mensajes BATCH {batch_json_msg_id} a {user_id}")
-        await sts.edit_text(f"⏳ Enviando lote... (0/{total_msgs})")
+        await sts.edit_text(f"⏳ Enviando Archivos (0/{total_msgs})")
         for i, msg_info in enumerate(msgs):
             channel_id = msg_info.get("channel_id"); msgid = msg_info.get("msg_id")
             if not channel_id or not msgid: logger.warning(f"Item {i} BATCH inválido: {msg_info}"); continue
@@ -379,7 +379,7 @@ async def start(client: Client, message: Message):
 
                 # Actualizar estado y pausar
                 if (i + 1) % 10 == 0 or (i + 1) == total_msgs:
-                    try: await sts.edit_text(f"⏳ Enviando lote... ({i + 1}/{total_msgs})")
+                    try: await sts.edit_text(f"⏳ Enviando Archivos ({i + 1}/{total_msgs})")
                     except MessageNotModified: pass; await asyncio.sleep(0.5) # Pausa igual
                 else: await asyncio.sleep(0.1) # Pausa más corta
 
