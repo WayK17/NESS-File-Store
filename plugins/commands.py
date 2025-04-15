@@ -461,9 +461,138 @@ async def simple_stats_command(client, message):
     try: await client.send_chat_action(message.chat.id, enums.ChatAction.TYPING); total_users = await db.total_users_count(); stats_text = (f"📊 **Estadísticas de la Base de Datos:**\n\n👥 Usuarios: `{total_users}`"); await message.reply_text(stats_text, quote=True)
     except Exception as e: logger.error(f"Error en /stats (simple): {e}"); await message.reply_text(" Ocurrió un error.")
 
+# En plugins/commands.py (Reemplaza tu función cb_handler actual con esta)
+
 @Client.on_callback_query()
-# ... (código cb_handler sin cambios) ...
-async def cb_handler(client: Client, query: CallbackQuery): user_id = query.from_user.id; q_data = query.data; logger.debug(f"Callback de {user_id}: {q_data}"); if q_data == "close_data": await query.message.delete(); elif q_data == "about": buttons = [[InlineKeyboardButton('Hᴏᴍᴇ', callback_data='start'), InlineKeyboardButton('🔒 Cʟᴏsᴇ', callback_data='close_data')]]; markup = InlineKeyboardMarkup(buttons); me2 = client.me.mention; try: await query.edit_message_text(script.ABOUT_TXT.format(me2), reply_markup=markup, parse_mode=enums.ParseMode.HTML); except: pass; elif q_data == "start": buttons = [[InlineKeyboardButton('💝 sᴜʙsᴄʀɪʙᴇ', url='https://youtube.com/@Tech_VJ')],[InlineKeyboardButton('🔍 sᴜᴘᴘᴏʀᴛ', url='https://t.me/vj_bot_disscussion'), InlineKeyboardButton('🤖 ᴜᴘᴅᴀᴛᴇ', url='https://t.me/vj_botz')],[InlineKeyboardButton('💁‍♀️ ʜᴇʟᴘ', callback_data='help'), InlineKeyboardButton('😊 ᴀʙᴏᴜᴛ', callback_data='about')]]; if CLONE_MODE == True: buttons.append([InlineKeyboardButton('🤖 ᴄʟᴏɴᴇ', callback_data='clone')]); markup = InlineKeyboardMarkup(buttons); me2 = client.me.mention; try: await query.edit_message_text(script.START_TXT.format(query.from_user.mention, me2), reply_markup=markup, parse_mode=enums.ParseMode.HTML); except: pass; elif q_data == "clone": buttons = [[InlineKeyboardButton('Hᴏᴍᴇ', callback_data='start'), InlineKeyboardButton('🔒 Cʟᴏsᴇ', callback_data='close_data')]]; markup = InlineKeyboardMarkup(buttons); try: await query.edit_message_text(script.CLONE_TXT.format(query.from_user.mention), reply_markup=markup, parse_mode=enums.ParseMode.HTML); except: pass; elif q_data == "help": buttons = [[InlineKeyboardButton('Hᴏᴍᴇ', callback_data='start'), InlineKeyboardButton('🔒 Cʟᴏsᴇ', callback_data='close_data')]]; markup = InlineKeyboardMarkup(buttons); try: await query.edit_message_text(script.HELP_TXT, reply_markup=markup, parse_mode=enums.ParseMode.HTML); except: pass; else: logger.warning(f"Callback no reconocido: {q_data}"); await query.answer("Opción no implementada", show_alert=False)
+async def cb_handler(client: Client, query: CallbackQuery):
+    user_id = query.from_user.id
+    q_data = query.data
+    logger.debug(f"Callback query recibido de {user_id}: {q_data}")
+
+    # Obtener mención del bot una vez
+    try:
+        me_mention = client.me.mention if client.me else (await client.get_me()).mention
+    except Exception as e:
+        logger.error(f"No se pudo obtener info del bot (get_me) en cb_handler: {e}")
+        me_mention = "este Bot" # Fallback
+
+    try:
+        # --- Botón Cerrar ---
+        if q_data == "close_data":
+            logger.debug(f"Cerrando mensaje para {user_id} (callback)")
+            await query.message.delete()
+
+        # --- Botón Acerca de ---
+        elif q_data == "about":
+            logger.debug(f"Mostrando 'Acerca de' para {user_id} (callback)")
+            buttons = [[
+                InlineKeyboardButton('🏠 Inicio', callback_data='start'),  # Botón traducido
+                InlineKeyboardButton('✖️ Cerrar', callback_data='close_data') # Botón traducido
+            ]]
+            reply_markup = InlineKeyboardMarkup(buttons)
+            # Editar el texto del mensaje para mostrar la info de Script.py
+            await query.edit_message_text(
+                text=script.ABOUT_TXT.format(me_mention), # Contenido desde Script.py
+                reply_markup=reply_markup,
+                parse_mode=enums.ParseMode.HTML,
+                disable_web_page_preview=True
+            )
+
+        # --- Botón Inicio (o volver al menú principal) ---
+        elif q_data == "start":
+            logger.debug(f"Mostrando 'Inicio' para {user_id} (callback)")
+            # Recrear los botones del menú principal
+            buttons = [[
+                 # Asegúrate que estas URLs/Textos sean los correctos para tu bot
+                 InlineKeyboardButton('Canal Principal', url='https://t.me/NessCloud'),
+                 InlineKeyboardButton('Grupo de Soporte', url='https://t.me/NESS_Soporte')
+                ],[
+                 InlineKeyboardButton('❓ Ayuda', callback_data='help'),      # Botón traducido
+                 InlineKeyboardButton('ℹ️ Acerca de', callback_data='about') # Botón traducido
+                ]]
+            # Añadir botón Clonar si aplica
+            if CLONE_MODE == False: # Usar la variable de config
+                buttons.append([InlineKeyboardButton('🤖 Clonar este Bot', callback_data='clone')]) # Botón traducido
+            reply_markup = InlineKeyboardMarkup(buttons)
+
+            # Intentar editar el texto. Si antes era una foto, editar la media.
+            try:
+                 await query.edit_message_text(
+                     text=script.START_TXT.format(query.from_user.mention, me_mention), # Contenido desde Script.py
+                     reply_markup=reply_markup,
+                     parse_mode=enums.ParseMode.HTML,
+                     disable_web_page_preview=True
+                 )
+            except MessageNotModified: pass # Ignorar si el mensaje no cambia
+            except Exception as e_text:
+                 # Si falla editar texto (quizás era una foto), intentar editar la media
+                 logger.warning(f"Fallo al editar texto en cb 'start' ({e_text}), intentando editar media.")
+                 try:
+                      await query.edit_message_media(
+                           media=InputMediaPhoto(random.choice(PICS) if PICS else "URL_FOTO_POR_DEFECTO_SI_PICS_FALLA"), # Necesitas una URL de fallback
+                           reply_markup=reply_markup
+                      )
+                      # Importante: Después de cambiar la media, hay que poner el caption
+                      await query.edit_message_caption(
+                           caption=script.START_TXT.format(query.from_user.mention, me_mention), # Contenido desde Script.py
+                           reply_markup=reply_markup,
+                           parse_mode=enums.ParseMode.HTML
+                      )
+                 except Exception as e_media:
+                      logger.error(f"Fallo también al editar media/caption en cb 'start': {e_media}")
+
+        # --- Botón Clonar ---
+        elif q_data == "clone":
+            logger.debug(f"Mostrando 'Clonar' para {user_id} (callback)")
+            buttons = [[
+                InlineKeyboardButton('🏠 Inicio', callback_data='start'),
+                InlineKeyboardButton('✖️ Cerrar', callback_data='close_data')
+            ]]
+            reply_markup = InlineKeyboardMarkup(buttons)
+            # Editar el texto del mensaje para mostrar la info de Script.py
+            await query.edit_message_text(
+                text=script.CLONE_TXT.format(query.from_user.mention), # Contenido desde Script.py
+                reply_markup=reply_markup,
+                parse_mode=enums.ParseMode.HTML,
+                disable_web_page_preview=True
+            )
+
+        # --- Botón Ayuda ---
+        elif q_data == "help":
+            logger.debug(f"Mostrando 'Ayuda' para {user_id} (callback)")
+            buttons = [[
+                InlineKeyboardButton('🏠 Inicio', callback_data='start'),
+                InlineKeyboardButton('✖️ Cerrar', callback_data='close_data')
+            ]]
+            reply_markup = InlineKeyboardMarkup(buttons)
+            # Editar el texto del mensaje para mostrar la info de Script.py
+            await query.edit_message_text(
+                text=script.HELP_TXT, # Contenido desde Script.py
+                reply_markup=reply_markup,
+                parse_mode=enums.ParseMode.HTML, # Asegúrate que HELP_TXT use HTML compatible
+                disable_web_page_preview=True
+            )
+
+        # --- Manejo de otros callbacks desconocidos ---
+        else:
+             logger.warning(f"Callback query desconocido recibido de {user_id}: {q_data}")
+             # Responder al callback para quitar el estado "cargando" del botón
+             await query.answer("Opción no reconocida.", show_alert=False)
+
+    # Capturar errores generales al editar/borrar mensajes o responder al callback
+    except MessageNotModified:
+        logger.debug(f"Mensaje no modificado para callback '{q_data}' de {user_id}")
+        try: await query.answer() # Responder igual para quitar "cargando"
+        except Exception: pass
+    except Exception as e:
+        logger.error(f"Error procesando callback query '{q_data}' para {user_id}: {e}", exc_info=True)
+        try:
+            # Intentar notificar al usuario del error
+            await query.answer("Ocurrió un error al procesar tu solicitud.", show_alert=True)
+        except Exception:
+            pass # Ignorar si falla la notificación del error
+
+
 
 
 # --- Tus comandos /addpremium y /delpremium (SIN CAMBIOS) ---
