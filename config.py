@@ -20,7 +20,7 @@ def is_enabled(value, default):
 # Bot Information
 API_ID = int(environ.get("API_ID", "15353803"))
 API_HASH = environ.get("API_HASH", "0dc88c619c52613806822fd600eec006")
-BOT_TOKEN = environ.get("BOT_TOKEN", "7095517891:AAGXGWs6hW7IU2XnOTMtZrjSEBmsWJG2rUI")
+BOT_TOKEN = environ.get("BOT_TOKEN", "8112764734:AAG6_n42MvPY7OVhy2aheE_qc_84_XQo2MA")
 
 PICS = (environ.get('PICS', 'https://envs.sh/GwI.jpg/IMG11042025.jpg')).split() # Bot Start Picture
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '6279723048').split()]
@@ -35,8 +35,8 @@ CLONE_DB_URI = environ.get("CLONE_DB_URI", "")
 CDB_NAME = environ.get("CDB_NAME", "clonetechvj")
 
 # Database Information
-DB_URI = environ.get("DB_URI", "mongodb+srv://XinZ:m3olvidexD@xinz.iulcp9d.mongodb.net")
-DB_NAME = environ.get("DB_NAME", "XinZ")
+DB_URI = environ.get("DB_URI", "mongodb+srv://WayK:m3olvidexD@nesscloud.oqcpd.mongodb.net")
+DB_NAME = environ.get("DB_NAME", "WayK")
 
 # Auto Delete Information
 AUTO_DELETE_MODE = bool(environ.get('AUTO_DELETE_MODE', True)) # Set True or False
@@ -87,7 +87,7 @@ URL = environ.get("URL", "https://testofvjfilter-1fa60b1b8498.herokuapp.com/")
 # ==========================================
 # Tiempo en segundos que el mensaje permanecerá visible antes de ser borrado.
 # Default: 3600 segundos = 1 hora
-BROADCAST_DELETE_DELAY = int(environ.get("BROADCAST_DELETE_DELAY", "300"))
+BROADCAST_DELETE_DELAY = int(environ.get("BROADCAST_DELETE_DELAY", "3600"))
 
 
 # ==========================================
