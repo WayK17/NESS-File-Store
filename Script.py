@@ -158,7 +158,6 @@ Para acceder a estos archivos, debes ser miembro del <b>CANAL</b>.
     PREMIUM_REQUIRED_MSG = """<b>🚫 Acceso Restringido 🚫</b>
 
 Hola {mention} 👋,
-
 Lo sentimos, este enlace es exclusivo para usuarios <b>Premium</b> ✨.
 
 <b>¿Quieres ser Premium?</b>
