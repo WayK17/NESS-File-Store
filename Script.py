@@ -11,11 +11,11 @@ class script(object):
 # Pregunta Dudas en telegram @KingVJ01
 
 
-    CAPTION = """<b>📂 Nombre Del Archivo: {file_name}
+    CAPTION = """<b>📂 Archivo:</b> <code>{file_name}</code>
 
-⚙️ Tamaño: {file_size}
+<b>⚙️ Tamaño:</b> <code>{file_size}</code>
 
-[「Nᴇss Cʟᴏᴜᴅ」](https://t.me/NessCloud)</b>""" 
+<b>[「Nᴇss Cʟᴏᴜᴅ」](https://t.me/NessCloud)</b>"""
 
 # No Eliminar Crédito Tg - @VJ_Botz
 # Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
@@ -129,39 +129,43 @@ Primero envía el comando /clone y luego sigue estos pasos.
 # Suscríbete al Canal de YouTube Para Bots Increíbles https://youtube.com/@Tech_VJ
 # Pregunta Dudas en telegram @KingVJ01
 
-    LOG_TEXT = """<b>#NuevoUsuario
-    
-ID - <code>{}</code>
+    LOG_TEXT = """<b>👤 Nuevo Usuario</b>
 
-Nᴏᴍʙʀᴇ - {}</b>
+ID: <code>{}</code>  
+Nombre: <b>{}</b>
 """
     RESTART_TXT = """
-<b>Bᴏᴛ Rᴇɪɴɪᴄɪᴀᴅᴏ !
+<b>🤖 Bot Reiniciado!</b>
 
-📅 Fᴇᴄʜᴀ : <code>{}</code>
-⏰ Hᴏʀᴀ : <code>{}</code>
-🌐 Zᴏɴᴀ Hᴏʀᴀʀɪᴀ : <code>Asia/Kolkata</code>
-🛠️ Esᴛᴀᴅᴏ ᴅᴇ Cᴏɴsᴛʀᴜᴄᴄɪóɴ: <code>v2.7.1 [ Esᴛᴀʙʟᴇ ]</code></b>"""
+📅 <b>Fecha:</b> <code>{}</code>  
+⏰ <b>Hora:</b> <code>{}</code>  
+🌐 <b>Zona Horaria:</b> <code>Asia/Kolkata</code>  
+🛠️ <b>Estado de Construcción:</b> <code>v2.7.1 [Estable]</code>"""
 
 
     # --- MENSAJE PARA FORZAR SUSCRIPCIÓN ---
-    FORCE_MSG = """<b>⚠️ Acceso Restringido ⚠️</b>
+    FORCE_MSG = """<b>🚧 Acceso Restringido 🚧</b>
 
-<b>Hola {mention} 👋!
-Debes ser miembro del CANAL para acceder a estos archivos.
+<b>Hola {mention} 👋🏼!</b>
 
-📣 Una vez que te hayas unido, por favor, presiona el botón 'Intentar de Nuevo'.
+Para acceder a estos archivos, debes ser miembro del <b>CANAL</b>.
 
-¡Gracias por tu apoyo! 😊</b>"""
+🔔 Una vez que te hayas unido, por favor, presiona el botón <b>'Intentar de Nuevo'</b>.
+
+¡Gracias por tu apoyo! 🙌✨"""
 
 
-    PREMIUM_REQUIRED_MSG = """<b>⚠️ Acceso Restringido ⚠️</b>
+    PREMIUM_REQUIRED_MSG = """<b>⚠<b>🚫 Acceso Restringido 🚫</b>
 
-Lo sentimos {mention}, este enlace es exclusivo para usuarios **Premium**. ✨
+Hola {mention} 👋,
 
-Si deseas acceder a este y otro contenido exclusivo, considera obtener una membresía Premium.
+Lo sentimos, este enlace es exclusivo para usuarios <b>Premium</b> ✨.
 
-(Aquí podrías añadir información sobre cómo hacerse premium, si tienes un sistema)"""
+Si deseas acceder a este y a otros contenidos exclusivos, considera obtener una membresía Premium.
+
+Para más información y para hacerte Premium, escribe a nuestro bot: <a href="TU_LINK_AQUI">👉 Aquí 👈</a>.
+
+¡Gracias por tu interés y apoyo! 💖"""
 
     # ... (resto de la clase) ...
 
