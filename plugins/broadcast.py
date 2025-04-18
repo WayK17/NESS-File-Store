@@ -165,9 +165,7 @@ async def broadcast_help_handler(bot, message):
     Reenvía el mensaje respondido a <b>todos los usuarios registrados</b>.
 
     <b>Formato:</b>
-    <ol>
-    <li>Responde a un mensaje con <code>/broadcast</code>.</li>
-    </ol>
+    <blockquote>1️⃣ Responde a un mensaje con <code>/broadcast</code></blockquote>
     """
     await message.reply_text(broadcast_help_text, disable_web_page_preview=True, quote=True)
 
@@ -196,12 +194,15 @@ async def delete_broadcast_handler(client, message):
     if not message.reply_to_message:
         # --- Añadido: Ayuda para /dbroadcast ---
         dbroadcast_help_text = """
-        <blockquote>ℹ️ <b>Cómo usar <code>/dbroadcast</code>:</b></blockquote>
+        <b>ℹ️ Cómo usar <code>/dbroadcast</code>:</b>
 
-        Reenvía el mensaje respondido a <b>todos los usuarios</b> y lo borra automáticamente después de un tiempo (configurable).
+        Reenvía el mensaje respondido a <b>todos los usuarios</b> y lo
+        borra automáticamente después de un tiempo (configurable).
 
         <b>Formato:</b>
-        1️⃣ Responde a un mensaje con <code>/dbroadcast</code>.
+        <blockquote><code>/dbroadcast</code></blockquote>
+
+        <i>Responde al mensaje que quieres enviar y el bot se encargará del resto.</i>
         """
         await message.reply_text(dbroadcast_help_text, quote=True, disable_web_page_preview=True)
         return
