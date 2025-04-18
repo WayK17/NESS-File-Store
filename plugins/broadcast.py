@@ -160,14 +160,14 @@ async def verupikkals(bot, message): # Nombre original mantenido
 async def broadcast_help_handler(bot, message):
     """Muestra la ayuda si /broadcast se usa sin responder a un mensaje."""
     broadcast_help_text = """
-    <blockquote>ℹ️ <b>Cómo usar /broadcast:</b></blockquote>
+    <blockquote>ℹ️ <b>Cómo usar <code>/broadcast</code>:</b></blockquote>
 
-    Reenvía el mensaje respondido a todos los usuarios registrados.
+    Reenvía el mensaje respondido a <b>todos los usuarios registrados</b>.
 
     <b>Formato:</b>
-    1. Responde a un mensaje con <code>/broadcast</code>.
-
-    <i>(Para enviar texto directamente, considera usar otro comando o modificar este).</i>
+    <ol>
+    <li>Responde a un mensaje con <code>/broadcast</code>.</li>
+    </ol>
     """
     await message.reply_text(broadcast_help_text, disable_web_page_preview=True, quote=True)
 
@@ -196,12 +196,12 @@ async def delete_broadcast_handler(client, message):
     if not message.reply_to_message:
         # --- Añadido: Ayuda para /dbroadcast ---
         dbroadcast_help_text = """
-        <blockquote>ℹ️ <b>Cómo usar /dbroadcast:</b></blockquote>
+        <blockquote>ℹ️ <b>Cómo usar <code>/dbroadcast</code>:</b></blockquote>
 
-        Reenvía el mensaje respondido a todos los usuarios y lo borra automáticamente después de un tiempo (configurable).
+        Reenvía el mensaje respondido a <b>todos los usuarios</b> y lo borra automáticamente después de un tiempo (configurable).
 
         <b>Formato:</b>
-        1. Responde a un mensaje con <code>/dbroadcast</code>.
+        1️⃣ Responde a un mensaje con <code>/dbroadcast</code>.
         """
         await message.reply_text(dbroadcast_help_text, quote=True, disable_web_page_preview=True)
         return
