@@ -111,7 +111,7 @@ async def incoming_gen_link(bot: Client, message: Message):
 async def gen_link_s(bot: Client, message: Message):
     replied = message.reply_to_message
     if not replied:
-        return await message.reply('⚠️ Responde a un mensaje para obtener enlaces compartibles.')
+        return await message.reply('<i>⚠️ Responde A Un Mensaje Para Obtener Enlaces Compartibles.</i>')
 
     user_id = message.from_user.id
     logger.info(f"Generando enlaces Normal/Premium con /link para {user_id}")
@@ -162,17 +162,17 @@ async def gen_link_batch(bot: Client, message: Message):
     # --- Bloque de Ayuda Añadido ---
     # Define el texto de ayuda (puedes modificar el formato y contenido a tu gusto)
     batch_help_text = """
-**ℹ️ Cómo usar /batch:**
+<b>ℹ️ Cómo usar <code>/batch</code>:</b>
 
 Genera enlaces de lote para un rango de mensajes.
 
-**Formato:**
-`/batch [Enlace_Msg_Inicial] [Enlace_Msg_Final]`
+<b>Formato:</b>
+<blockquote><code>/batch [Enlace_Msg_Inicial] [Enlace_Msg_Final]</code></blockquote>
 
-**Ejemplo:**
-`/batch https://t.me/c/123456/10 https://t.me/c/123456/25`
+<b>Ejemplo:</b>
+<blockquote><code>/batch https://t.me/c/123456/10 https://t.me/c/123456/25</code></blockquote>
 
-*Asegúrate de que los enlaces sean del mismo chat y el bot sea miembro.*
+<i>Asegúrate de que los enlaces sean del mismo chat y que el bot sea miembro.</i>
 """
 
     # Comprueba si se proporcionaron los argumentos correctos
