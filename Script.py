@@ -155,17 +155,17 @@ Para acceder a estos archivos, debes ser miembro del <b>CANAL</b>.
 ¡Gracias por tu apoyo! 🙌✨"""
 
 
-    PREMIUM_REQUIRED_MSG = """<b>⚠<b>🚫 Acceso Restringido 🚫</b>
+    PREMIUM_REQUIRED_MSG = """<b>🚫 Acceso Restringido 🚫</b>
 
 Hola {mention} 👋,
 
 Lo sentimos, este enlace es exclusivo para usuarios <b>Premium</b> ✨.
 
-Si deseas acceder a este y a otros contenidos exclusivos, considera obtener una membresía Premium.
+<b>¿Quieres ser Premium?</b>
+<blockquote>Escribe a nuestro bot para más información: <a href="https://t.me/NESS_SupporttBot">👉 Aquí 👈</a></blockquote>
 
-Para más información y para hacerte Premium, escribe a nuestro bot: <a href="TU_LINK_AQUI">👉 Aquí 👈</a>.
-
-¡Gracias por tu interés y apoyo! 💖"""
+<i>Gracias por tu interés y apoyo.</i> 💖
+"""
 
     # ... (resto de la clase) ...
 
